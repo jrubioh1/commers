@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -22,13 +24,18 @@ public class Service {
     private String description;
     private Double price;
     private Integer stock;
-
-    private Client createBy;
+   
+    @ManyToMany
+    @JoinColumn(name = "create_at")
+    private Employee createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 
-    private Client modifyBy;
+
+    @ManyToMany
+    @JoinColumn(name = "modify_by")
+    private Employee modifyBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifyAt;
@@ -87,11 +94,11 @@ public class Service {
         this.stock = stock;
     }
 
-    public Client getCreateBy() {
+    public Employee getCreateBy() {
         return createBy;
     }
 
-    public void setCreateBy(Client createBy) {
+    public void setCreateBy(Employee createBy) {
         this.createBy = createBy;
     }
 
@@ -103,11 +110,11 @@ public class Service {
         this.createAt = createAt;
     }
 
-    public Client getModifyBy() {
+    public Employee getModifyBy() {
         return modifyBy;
     }
 
-    public void setModifyBy(Client modifyBy) {
+    public void setModifyBy(Employee modifyBy) {
         this.modifyBy = modifyBy;
     }
 

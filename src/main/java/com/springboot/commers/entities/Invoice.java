@@ -3,7 +3,10 @@ package com.springboot.commers.entities;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -15,12 +18,17 @@ public class Invoice {
 
     private Long id;
 
-    @OneToMany
+    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
     private List<LineInvoice> linesInvoice;
 
     private Double whole;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    @ManyToOne
+    @JoinColumn(name = "employye_id")
     private Client client;
 
     @Temporal(TemporalType.TIMESTAMP)

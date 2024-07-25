@@ -1,9 +1,17 @@
 package com.springboot.commers.entities;
 
+import java.util.List;
+
+import javax.management.relation.Role;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,19 +26,23 @@ public class Client {
     private String email;
     private String password;
 
-    
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "usuario_roles",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "rol_id"))
+    private List<Rol> roles;
 
 
     public Client() {
     }
     
-    public Client(String name, String email, String password) {
+    public Client(String name, String email, String password, List<Rol> roles)  {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.roles= roles;
     }
-
     
 
     public Client(Long id) {
@@ -61,10 +73,13 @@ public class Client {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+
 
     @Override
     public String toString() {
-        return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + "]";
+        return "Client [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles="
+                + roles + "]";
     }
 
     @Override
@@ -90,6 +105,14 @@ public class Client {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public List<Rol> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Rol> roles) {
+        this.roles = roles;
     }
 
     

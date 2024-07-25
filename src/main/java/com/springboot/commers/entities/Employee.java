@@ -5,9 +5,13 @@ import java.util.List;
 import org.hibernate.annotations.ManyToAny;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,7 +26,11 @@ public class Employee{
     private String email;
     private String password;
 
-    @ManyToAny
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "empleado_roles",
+        joinColumns = @JoinColumn(name = "empleado_id"),
+        inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private List<Rol> roles;
 
     
