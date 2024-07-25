@@ -1,9 +1,5 @@
 package com.springboot.commers.entities;
 
-import java.util.List;
-
-import org.hibernate.annotations.ManyToAny;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,8 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "employee")
-public class Employee{
+@Table(name = "client")
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,30 +18,24 @@ public class Employee{
     private String email;
     private String password;
 
-    @ManyToAny
-    private List<Rol> roles;
-
     
 
 
-    public Employee() {
+
+    public Client() {
     }
-
     
-    public Employee(String name, String email, String password, List<Rol> roles) {
+    public Client(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = roles;
     }
 
     
 
-
-    public Employee(Long id) {
+    public Client(Long id) {
         this.id = id;
     }
-
 
     public Long getId() {
         return id;
@@ -71,22 +61,11 @@ public class Employee{
     public void setPassword(String password) {
         this.password = password;
     }
-    public List<Rol> getRoles() {
-        return roles;
-    }
-    public void setRoles(List<Rol> roles) {
-        this.roles = roles;
-    }
-
-    
-
 
     @Override
     public String toString() {
-        return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles="
-                + roles + "]";
+        return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + "]";
     }
-
 
     @Override
     public int hashCode() {
@@ -96,7 +75,6 @@ public class Employee{
         return result;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -105,7 +83,7 @@ public class Employee{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Employee other = (Employee) obj;
+        Client other = (Client) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -115,8 +93,6 @@ public class Employee{
     }
 
     
-  
-
 
 
 

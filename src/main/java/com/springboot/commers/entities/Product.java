@@ -24,14 +24,14 @@ public class Product {
     private Integer stock;
 
 
-    private Employee createBy;
+    private Client createBy;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 
-    private Employee modifyBy;
+    private Client modifyBy;
     
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modifyAt;
 
 
@@ -83,10 +83,10 @@ public class Product {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
-    public Employee getCreateBy() {
+    public Client getCreateBy() {
         return createBy;
     }
-    public void setCreateBy(Employee createBy) {
+    public void setCreateBy(Client createBy) {
         this.createBy = createBy;
     }
     public Date getCreateAt() {
@@ -95,10 +95,10 @@ public class Product {
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
-    public Employee getModifyBy() {
+    public Client getModifyBy() {
         return modifyBy;
     }
-    public void setModifyBy(Employee modifyBy) {
+    public void setModifyBy(Client modifyBy) {
         this.modifyBy = modifyBy;
     }
     public Date getModifyAt() {

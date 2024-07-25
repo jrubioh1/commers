@@ -1,9 +1,5 @@
 package com.springboot.commers.entities;
 
-import java.util.List;
-
-import org.hibernate.annotations.ManyToAny;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,38 +7,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "employee")
-public class Employee{
-
+@Table(name="rol")
+public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; 
-
+    private Long id;
     private String name;
-    private String email;
-    private String password;
-
-    @ManyToAny
-    private List<Rol> roles;
 
     
 
-
-    public Employee() {
+    public Rol() {
     }
 
     
-    public Employee(String name, String email, String password, List<Rol> roles) {
+    public Rol(String name) {
         this.name = name;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
     }
 
     
 
 
-    public Employee(Long id) {
+    public Rol(Long id) {
         this.id = id;
     }
 
@@ -59,32 +44,11 @@ public class Employee{
     public void setName(String name) {
         this.name = name;
     }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public List<Rol> getRoles() {
-        return roles;
-    }
-    public void setRoles(List<Rol> roles) {
-        this.roles = roles;
-    }
-
-    
 
 
     @Override
     public String toString() {
-        return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles="
-                + roles + "]";
+        return "Rol [id=" + id + ", name=" + name + "]";
     }
 
 
@@ -105,7 +69,7 @@ public class Employee{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Employee other = (Employee) obj;
+        Rol other = (Rol) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -115,10 +79,7 @@ public class Employee{
     }
 
     
-  
 
-
-
-
+    
 
 }
