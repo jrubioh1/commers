@@ -16,43 +16,30 @@ public class Invoice {
     private Long id;
 
     @OneToMany
-    private List<Product> products;
+    private List<LineInvoice> linesInvoice;
 
     private Double whole;
     private Employee employee;
 
-
     private Client client;
-
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-
-    
-
     public Invoice() {
     }
 
-    
-
-    public Invoice(List<Product> products, Double whole, Employee employee, Client client, Date date) {
-        this.products = products;
+    public Invoice(List<LineInvoice> linesInvoice, Double whole, Employee employee, Client client, Date date) {
+        this.linesInvoice = linesInvoice;
         this.whole = whole;
         this.employee = employee;
         this.client = client;
         this.date = date;
     }
 
-    
-
-
-
     public Invoice(Long id) {
         this.id = id;
     }
-
-
 
     public Long getId() {
         return id;
@@ -60,14 +47,6 @@ public class Invoice {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 
     public Double getWhole() {
@@ -102,17 +81,21 @@ public class Invoice {
         this.date = date;
     }
 
-    
+    public List<LineInvoice> getLinesInvoice() {
+        return linesInvoice;
+    }
 
+    public void setLinesInvoice(List<LineInvoice> linesInvoice) {
+        this.linesInvoice = linesInvoice;
+    }
 
+   
 
     @Override
     public String toString() {
-        return "Invoice [id=" + id + ", products=" + products + ", whole=" + whole + ", employee=" + employee
+        return "Invoice [id=" + id + ", linesInvoice=" + linesInvoice + ", whole=" + whole + ", employee=" + employee
                 + ", client=" + client + ", date=" + date + "]";
     }
-
-
 
     @Override
     public int hashCode() {
@@ -121,8 +104,6 @@ public class Invoice {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
-
-
 
     @Override
     public boolean equals(Object obj) {
@@ -141,13 +122,6 @@ public class Invoice {
         return true;
     }
 
-    
-
-
-    
-
-
-
-    
+   
 
 }
