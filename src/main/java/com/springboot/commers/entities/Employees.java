@@ -6,15 +6,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "client")
-public class Client extends User {
+@Table(name = "employees")
+public class Employees extends User{
+
+    
 
 
-
-       public Client() {
+    
+    public Employees() {
     }
 
-    public Client(String name, String email, String password, List<Rol> roles) {
+    public Employees(String name, String email, String password, List<Rol> roles) {
         super(name, email, password, roles);
     }
 
