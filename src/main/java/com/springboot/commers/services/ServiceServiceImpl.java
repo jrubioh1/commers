@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.springboot.commers.entities.Employee;
 import com.springboot.commers.entities.Service;
 import com.springboot.commers.repositories.IServiceRepository;
@@ -13,16 +15,19 @@ public class ServiceServiceImpl implements IServiceService{
     private IServiceRepository repository;
 
     @Override
+      @Transactional(readOnly = true)
     public List<Service> findAll() {
          return (List<Service>) repository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Service> findById(Long id) {
         return repository.findById(id);
     }
 
     @Override
+    @Transactional()
     public Service save(Service service, Employee employee) {
 
         service.setCreateBy(employee);
@@ -31,6 +36,7 @@ public class ServiceServiceImpl implements IServiceService{
     }
 
     @Override
+    @Transactional()
     public Optional<Service> update(Long id, Service service, Employee employee) {
         Optional<Service> optionalService= repository.findById(id);
 
@@ -50,6 +56,7 @@ public class ServiceServiceImpl implements IServiceService{
     }
 
     @Override
+    @Transactional()
     public Optional<Service> delete(Long id) {
        Optional<Service> optionalService= repository.findById(id);
 

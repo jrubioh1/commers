@@ -57,6 +57,7 @@ public class EmployeeServiceImpl  implements IEmployeeService{
     }
 
     @Override
+    @Transactional()
     public Optional<Employee> delete(Long id) {
         Optional<Employee> optonalEmployee= repository.findById(id);
         optonalEmployee.ifPresent(employeeDb->{
@@ -65,6 +66,12 @@ public class EmployeeServiceImpl  implements IEmployeeService{
 
         return optonalEmployee;
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Employee> findByName(String name) {
+        return repository.findByName(name);
     }
 
 }

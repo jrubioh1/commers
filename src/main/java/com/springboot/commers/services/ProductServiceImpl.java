@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Employee;
 import com.springboot.commers.entities.Product;
@@ -18,6 +19,7 @@ public class ProductServiceImpl implements IProductsService {
     private IProductRepository repository;
 
     @Override
+    @Transactional()
     public Optional<Product> delete(Long id) {
        Optional<Product> optionalProduct= repository.findById(id);
        optionalProduct.ifPresent(productDb->{
@@ -28,16 +30,19 @@ public class ProductServiceImpl implements IProductsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> findAll() {
         return (List<Product>)repository.findAll();
     }
 
     @Override
+    @Transactional(readOnly =  true)
     public Optional<Product> findById(Long id) {
        return  repository.findById(id);
     }
 
     @Override
+    @Transactional()
     public Product save(Product product, Employee employee) {
         product.setCreateAt(LocalDateTime.now());
         product.setCreateBy(employee);
@@ -45,6 +50,7 @@ public class ProductServiceImpl implements IProductsService {
     }
 
     @Override
+    @Transactional()
     public Optional<Product> update(Long id, Product product, Employee employee) {
         Optional<Product> optionalProduct= repository.findById(id);
         if(optionalProduct.isPresent()){

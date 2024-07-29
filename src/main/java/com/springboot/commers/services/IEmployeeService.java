@@ -12,5 +12,7 @@ public interface IEmployeeService {
     Employee save(Employee employee);
     Optional<Employee> update(Long id, Employee employee);
     Optional<Employee> delete(Long id); 
+    Optional<Employee> findByName(String name);
+
 
 }

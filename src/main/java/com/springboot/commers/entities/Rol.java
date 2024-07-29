@@ -2,6 +2,9 @@ package com.springboot.commers.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,11 +18,15 @@ public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(unique = true)
     private String name;
 
+    @JsonIgnoreProperties({"roles", "handler", "hibernateLazyInitializer"})
     @ManyToMany(mappedBy = "roles")
     private List<Employee> employees;
 
+    @JsonIgnoreProperties({"roles", "handler", "hibernateLazyInitializer"})
     @ManyToMany(mappedBy = "roles")
     private List<Client> clients;
 

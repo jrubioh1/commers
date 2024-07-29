@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Rol;
 import com.springboot.commers.repositories.IRolRepository;
@@ -14,21 +15,25 @@ public class RolServiceImpl implements IRolService {
     private IRolRepository repository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Rol> findAll() {
        return (List<Rol>) repository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Rol> findById(Long id) {
         return repository.findById(id);
     }
 
     @Override
+    @Transactional()
     public Rol save(Rol rol) {
         return repository.save(rol);
     }
 
     @Override
+    @Transactional()
     public Optional<Rol> update(Long id, Rol rol) {
         
         Optional<Rol> optionalRol= repository.findById(id);
@@ -44,6 +49,7 @@ public class RolServiceImpl implements IRolService {
     }
 
     @Override
+    @Transactional()
     public Optional<Rol> delete(Long id) {
        Optional<Rol> optionalRol= repository.findById(id);
        optionalRol.ifPresent((rolDb)->{
