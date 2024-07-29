@@ -23,7 +23,7 @@ public class Service {
     private String name;
     private String description;
     private Double price;
-    private Integer stock;
+   
    
     @ManyToMany
     @JoinColumn(name = "create_at")
@@ -43,11 +43,11 @@ public class Service {
     public Service() {
     }
 
-    public Service(String name, String description, Double price, Integer stock) {
+    public Service(String name, String description, Double price) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.stock = stock;
+      
     }
 
     public Long getId() {
@@ -86,13 +86,6 @@ public class Service {
         this.price = price;
     }
 
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
 
     public Employee getCreateBy() {
         return createBy;
@@ -128,8 +121,7 @@ public class Service {
 
     @Override
     public String toString() {
-        return "Service [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price + ", stock="
-                + stock + ", createBy=" + createBy + ", createAt=" + createAt + ", modifyBy=" + modifyBy + ", modifyAt="
+        return "Service [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price  + ", createBy=" + createBy + ", createAt=" + createAt + ", modifyBy=" + modifyBy + ", modifyAt="
                 + modifyAt + "]";
     }
 
