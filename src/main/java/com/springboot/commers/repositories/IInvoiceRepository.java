@@ -7,4 +7,5 @@ import com.springboot.commers.entities.Invoice;
 
 public interface IInvoiceRepository extends CrudRepository<Invoice, Long>{
 
+
 }
