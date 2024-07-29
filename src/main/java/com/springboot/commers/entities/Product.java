@@ -1,8 +1,6 @@
 package com.springboot.commers.entities;
 
-import java.util.Date;
-
-import org.hibernate.annotations.ManyToAny;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,14 +29,14 @@ public class Product {
     private Employee createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
+    private LocalDateTime createAt;
 
     @ManyToMany
     @JoinColumn(name = "modify_by")
     private Employee modifyBy;
     
     @Temporal(TemporalType.TIMESTAMP)
-    private Date modifyAt;
+    private LocalDateTime modifyAt;
 
 
 
@@ -95,10 +93,10 @@ public class Product {
     public void setCreateBy(Employee createBy) {
         this.createBy = createBy;
     }
-    public Date getCreateAt() {
+    public LocalDateTime getCreateAt() {
         return createAt;
     }
-    public void setCreateAt(Date createAt) {
+    public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
     public Employee getModifyBy() {
@@ -107,14 +105,12 @@ public class Product {
     public void setModifyBy(Employee modifyBy) {
         this.modifyBy = modifyBy;
     }
-    public Date getModifyAt() {
+    public LocalDateTime getModifyAt() {
         return modifyAt;
     }
-    public void setModifyAt(Date modifyAt) {
+    public void setModifyAt(LocalDateTime modifyAt) {
         this.modifyAt = modifyAt;
     }
-
-    
 
 
 

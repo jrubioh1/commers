@@ -1,6 +1,6 @@
 package com.springboot.commers.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +30,7 @@ public class Service {
     private Employee createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
+    private LocalDateTime createAt;
 
 
     @ManyToMany
@@ -38,7 +38,7 @@ public class Service {
     private Employee modifyBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date modifyAt;
+    private LocalDateTime modifyAt;
 
     public Service() {
     }
@@ -102,11 +102,11 @@ public class Service {
         this.createBy = createBy;
     }
 
-    public Date getCreateAt() {
+    public LocalDateTime getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(Date createAt) {
+    public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
 
@@ -118,11 +118,11 @@ public class Service {
         this.modifyBy = modifyBy;
     }
 
-    public Date getModifyAt() {
+    public LocalDateTime getModifyAt() {
         return modifyAt;
     }
 
-    public void setModifyAt(Date modifyAt) {
+    public void setModifyAt(LocalDateTime modifyAt) {
         this.modifyAt = modifyAt;
     }
 
