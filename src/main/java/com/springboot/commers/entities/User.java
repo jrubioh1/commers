@@ -6,7 +6,7 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
-
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "users")
 public class User {
