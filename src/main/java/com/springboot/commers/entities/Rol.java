@@ -24,19 +24,17 @@ public class Rol {
 
     @JsonIgnoreProperties({"roles", "handler", "hibernateLazyInitializer"})
     @ManyToMany(mappedBy = "roles")
-    private List<Employee> employees;
+    private List<User> users;
 
-    @JsonIgnoreProperties({"roles", "handler", "hibernateLazyInitializer"})
-    @ManyToMany(mappedBy = "roles")
-    private List<Client> clients;
+ 
 
     public Rol() {
     }
 
-    public Rol(String name, List<Employee> employees, List<Client> clients) {
+    public Rol(String name, List<User> users) {
         this.name = name;
-        this.employees = employees;
-        this.clients = clients;
+        this.users = users;
+        
     }
 
     public Rol(Long id) {
@@ -59,27 +57,21 @@ public class Rol {
         this.name = name;
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+    public List<User> getEmployees() {
+        return users;
     }
 
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
+    public void setEmployees(List<User> users) {
+        this.users = users;
     }
 
-    public List<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
-    }
 
     
 
+
     @Override
     public String toString() {
-        return "Rol [id=" + id + ", name=" + name + ", employees=" + employees + ", clients=" + clients + "]";
+        return "Rol [id=" + id + ", name=" + name + ", users=" + users + "]";
     }
 
     @Override

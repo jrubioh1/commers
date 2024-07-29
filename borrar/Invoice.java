@@ -5,7 +5,9 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -15,20 +17,19 @@ import jakarta.persistence.TemporalType;
 @Entity
 @Table(name = "invoice")
 public class Invoice {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+    @OneToMany( cascade = CascadeType.ALL)
     private List<LineInvoice> linesInvoice;
 
     private Double whole;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "employye_id")
     private Client client;
 
     @Temporal(TemporalType.TIMESTAMP)

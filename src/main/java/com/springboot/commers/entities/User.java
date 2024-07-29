@@ -2,12 +2,15 @@ package com.springboot.commers.entities;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 import jakarta.persistence.*;
 
-@MappedSuperclass
-public abstract class User {
+
+@Entity
+@Table(name = "users")
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,10 +19,9 @@ public abstract class User {
     private String email;
     private String password;
 
-    @JsonIgnoreProperties({"users", "handler", "hibernateLazyInitializer"})
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "user_roles",
+        name = "users_roles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )

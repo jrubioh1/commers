@@ -7,7 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -24,15 +26,13 @@ public class Product {
     private Double price;
     private Integer stock;
 
-    @ManyToMany
-    @JoinColumn(name = "create_at")
+  
     private Employee createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createAt;
 
-    @ManyToMany
-    @JoinColumn(name = "modify_by")
+  
     private Employee modifyBy;
     
     @Temporal(TemporalType.TIMESTAMP)

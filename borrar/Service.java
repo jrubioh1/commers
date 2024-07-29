@@ -25,16 +25,13 @@ public class Service {
     private Double price;
    
    
-    @ManyToMany
-    @JoinColumn(name = "create_at")
+   
     private Employee createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createAt;
 
 
-    @ManyToMany
-    @JoinColumn(name = "modify_by")
     private Employee modifyBy;
 
     @Temporal(TemporalType.TIMESTAMP)

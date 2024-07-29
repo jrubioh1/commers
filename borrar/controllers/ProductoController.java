@@ -61,12 +61,9 @@ public class ProductoController {
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@Valid @RequestBody Product product, BindingResult result) {
+    public ResponseEntity<?> create( @RequestBody Product product) {
         // validation.validate(product, result);
-        if (result.hasFieldErrors()) {
-            return validation(result);
-
-        }
+      
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -81,10 +78,7 @@ public class ProductoController {
     @PutMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody Product product, BindingResult result, @PathVariable Long id) {
-        // validation.validate(product, result);
-        if (result.hasFieldErrors()) {
-            return validation(result);
-        }
+    
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -116,15 +110,5 @@ public class ProductoController {
         return ResponseEntity.notFound().build();
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
-        });
-
-        return ResponseEntity.badRequest().body(errors);
-    }
-
+   
 }
