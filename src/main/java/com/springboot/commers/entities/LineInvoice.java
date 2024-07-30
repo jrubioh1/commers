@@ -1,6 +1,8 @@
 package com.springboot.commers.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="line_invoice")
+@Table(name = "line_invoice")
 @Getter
 @Setter
 public class LineInvoice {
@@ -20,45 +22,35 @@ public class LineInvoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
 
     private Integer amount;
     private Double price;
 
-    
     public LineInvoice() {
     }
 
-
-    
     public LineInvoice(Invoice invoice, Product product, Integer amount) {
         this.invoice = invoice;
         this.product = product;
         this.amount = amount;
     }
 
-    
-
     public LineInvoice(Long id) {
         this.id = id;
     }
-
-
-
 
     @Override
     public String toString() {
         return "LineInvoice [id=" + id + ", invoice=" + invoice + ", product=" + product + ", amount=" + amount
                 + ", price=" + price + "]";
     }
-
-
 
     @Override
     public int hashCode() {
@@ -71,8 +63,6 @@ public class LineInvoice {
         result = prime * result + ((price == null) ? 0 : price.hashCode());
         return result;
     }
-
-
 
     @Override
     public boolean equals(Object obj) {
@@ -110,9 +100,5 @@ public class LineInvoice {
             return false;
         return true;
     }
-
-    
-    
-
 
 }

@@ -1,10 +1,12 @@
 package com.springboot.commers.entities;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,37 +28,36 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LineInvoice> linesInvoice;
 
     private Double whole;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
     private Employees employee;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     private Clients client;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private LocalDateTime dateTime;
 
     public Invoice() {
     }
 
-    public Invoice(List<LineInvoice> linesInvoice, Double whole, Employees employee, Clients client, Date date) {
+    public Invoice(List<LineInvoice> linesInvoice, Double whole, Employees employee, Clients client,
+            LocalDateTime dateTime) {
         this.linesInvoice = linesInvoice;
         this.whole = whole;
         this.employee = employee;
         this.client = client;
-        this.date = date;
+        this.dateTime = dateTime;
     }
 
     public Invoice(Long id) {
         this.id = id;
     }
-
 
     @Override
     public String toString() {
@@ -88,7 +89,5 @@ public class Invoice {
             return false;
         return true;
     }
-
-   
 
 }

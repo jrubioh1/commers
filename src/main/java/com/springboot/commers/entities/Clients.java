@@ -5,6 +5,8 @@ import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +16,8 @@ import lombok.Setter;
 @Setter
 public class Clients extends User {
 
-    
-    @OneToMany(mappedBy = "client")  
-    private List<Invoice> invoices; 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Invoice> invoices;
 
        public Clients() {
     }
@@ -30,14 +31,6 @@ public class Clients extends User {
 
     public Clients(Long id) {
         super(id);
-    }
-
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
-
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
     }
 
     

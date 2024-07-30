@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,15 +24,13 @@ public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true)
     private String name;
-
-    @JsonIgnoreProperties({"roles", "handler", "hibernateLazyInitializer"})
-    @ManyToMany(mappedBy = "roles")
+    
+    @JsonIgnoreProperties({ "roles", "handler", "hibernateLazyInitializer" })
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<User> users;
-
- 
 
     public Rol() {
     }
@@ -38,14 +38,12 @@ public class Rol {
     public Rol(String name, List<User> users) {
         this.name = name;
         this.users = users;
-        
+
     }
 
     public Rol(Long id) {
         this.id = id;
     }
-
-   
 
     @Override
     public String toString() {

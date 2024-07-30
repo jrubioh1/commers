@@ -3,7 +3,9 @@ package com.springboot.commers.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,19 +30,20 @@ public class Product {
     private Double price;
     private Integer stock;
 
-    @ManyToOne()
+   
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "create_by_id")
     private Employees createBy;
 
     private LocalDateTime createAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "update_by_id")
     private Employees modifyBy;
 
     private LocalDateTime modifyAt;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LineInvoice> linesInvoice;
 
     public Product() {
