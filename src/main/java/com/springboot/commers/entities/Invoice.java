@@ -62,7 +62,7 @@ public class Invoice {
     @Override
     public String toString() {
         return "Invoice [id=" + id + ", linesInvoice=" + linesInvoice + ", whole=" + whole + ", employee=" + employee
-                + ", client=" + client + ", date=" + date + "]";
+                + ", client=" + client + ", dateTime=" + dateTime + "]";
     }
 
     @Override
