@@ -7,9 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="line_invoice")
+@Getter
+@Setter
 public class LineInvoice {
 
     @Id
@@ -46,38 +50,6 @@ public class LineInvoice {
     }
 
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Invoice getInvoice() {
-        return invoice;
-    }
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-    }
-    public Product getProduct() {
-        return product;
-    }
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-    public Integer getAmount() {
-        return amount;
-    }
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-    public Double getPrice() {
-        return price;
-    }
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    
 
 
     @Override

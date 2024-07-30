@@ -3,7 +3,7 @@ package com.springboot.commers.entities;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,9 +14,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "invoice")
+@Getter
+@Setter
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,55 +57,6 @@ public class Invoice {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getWhole() {
-        return whole;
-    }
-
-    public void setWhole(Double whole) {
-        this.whole = whole;
-    }
-
-    public Employees getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employees employee) {
-        this.employee = employee;
-    }
-
-    public Clients getClient() {
-        return client;
-    }
-
-    public void setClient(Clients client) {
-        this.client = client;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public List<LineInvoice> getLinesInvoice() {
-        return linesInvoice;
-    }
-
-    public void setLinesInvoice(List<LineInvoice> linesInvoice) {
-        this.linesInvoice = linesInvoice;
-    }
-
-   
 
     @Override
     public String toString() {
