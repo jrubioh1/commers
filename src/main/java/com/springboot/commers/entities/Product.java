@@ -7,10 +7,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+
 
 @Entity
 @Table(name = "product")
@@ -24,16 +25,18 @@ public class Product {
     private Double price;
     private Integer stock;
 
-  
-    //private Employees createBy;
+    @ManyToOne()
+    @JoinColumn(name = "create_by_id")
+    private Employees createBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
+   
     private LocalDateTime createAt;
 
-  
-    //private Employees modifyBy;
+    @ManyToOne
+    @JoinColumn(name = "update_by_id")
+    private Employees modifyBy;
     
-    @Temporal(TemporalType.TIMESTAMP)
+   
     private LocalDateTime modifyAt;
 
     @OneToMany(mappedBy = "product")

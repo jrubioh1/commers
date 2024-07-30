@@ -13,15 +13,22 @@ public class Employees extends User{
     @OneToMany(mappedBy = "employee")  
     private List<Invoice> invoices; 
 
+    @OneToMany(mappedBy = "createBy")
+    private List<Product> productsCreated;
+
+    @OneToMany(mappedBy = "modifyBy")
+    private List<Product> producsUpdates;
+
+
 
     
     public Employees() {
     }
 
     
-    public Employees(String name, String email, String password, List<Rol> roles, List<Invoice> invoices) {
+    public Employees(String name, String email, String password, List<Rol> roles) {
         super(name, email, password, roles);
-        this.invoices = invoices;
+
     }
 
     
@@ -36,9 +43,7 @@ public class Employees extends User{
         return invoices;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
-    }
+  
 
     
 }
