@@ -7,10 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -142,10 +138,13 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", stock=" + stock + ", createBy="
-                + createBy + ", createAt=" + createAt + ", modifyBy=" + modifyBy + ", modifyAt=" + modifyAt + "]";
+        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", stock=" + stock + ", createAt="
+                + createAt + ", modifyAt=" + modifyAt + ", linesInvoice=" + linesInvoice + "]";
     }
 
+
+
+   
     
 
 }

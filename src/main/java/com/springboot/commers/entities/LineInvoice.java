@@ -19,11 +19,11 @@ public class LineInvoice {
     private Long id;
 
     @ManyToOne()
-    @JoinColumn(name = "lineInvoice_id")
+    @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
     @ManyToOne()
-    @JoinColumn(name = "linesInvoice")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     private Integer amount;
