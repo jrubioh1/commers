@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.commers.entities.Client;
+import com.springboot.commers.entities.Clients;
 import com.springboot.commers.services.IClientService;
 
 
@@ -24,27 +24,27 @@ import com.springboot.commers.services.IClientService;
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 @RestController
 @RequestMapping("/api/clients")
-public class ClientesController {
+public class ClientsController {
    
     
     @Autowired
     private IClientService service;
 
     @GetMapping
-    public List<Client> list() {
+    public List<Clients> list() {
         return service.findAll();
     }
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@RequestBody Client client) {
+    public ResponseEntity<?> create(@RequestBody Clients client) {
        
  
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));}
   
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Client client) {
+    public ResponseEntity<?> register(@RequestBody Clients client) {
     
         return create(client);
      }

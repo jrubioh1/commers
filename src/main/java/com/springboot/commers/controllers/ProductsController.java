@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.commers.entities.Employee;
+import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Product;
 import com.springboot.commers.services.IEmployeeService;
 import com.springboot.commers.services.IProductsService;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 @RestController
 @RequestMapping("/api/product")
-public class ProductoController {
+public class ProductsController {
 
     @Autowired
     IProductsService service;
@@ -65,13 +65,15 @@ public class ProductoController {
         // validation.validate(product, result);
       
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       /*  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
 
-        Employee employee = serviceEmployee.findByName(name).orElseThrow();
+        Employees employee = serviceEmployee.findByName(name).orElseThrow();
         if (employee == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Employee not found.");
-        }
+        } */
+        Employees employee = serviceEmployee.findById(1L).orElseThrow();
+
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(product, employee));
     }
 
@@ -83,7 +85,7 @@ public class ProductoController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
 
-        Employee employee = serviceEmployee.findByName(name).orElseThrow();
+        Employees employee = serviceEmployee.findByName(name).orElseThrow();
         if (employee == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Employee not found.");
         }
