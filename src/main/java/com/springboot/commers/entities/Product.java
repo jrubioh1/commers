@@ -36,14 +36,14 @@ public class Product {
    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "create_by_id")
-    @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password"})
+    @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password","hibernateLazyInitializer", "handler"})
     private Employees createBy;
 
     private LocalDateTime createAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "update_by_id")
-    @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password"})
+    @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password","hibernateLazyInitializer", "handler"})
     private Employees modifyBy;
 
     private LocalDateTime modifyAt;
