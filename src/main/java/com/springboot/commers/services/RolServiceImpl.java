@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Rol;
 import com.springboot.commers.repositories.IRolRepository;
 
+@Service
 public class RolServiceImpl implements IRolService {
 
     @Autowired
@@ -57,6 +59,13 @@ public class RolServiceImpl implements IRolService {
        });
 
        return optionalRol; 
+    }
+
+  
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Rol> findByName(String  name) {
+       return repository.findByName(name);
     }
 
 }

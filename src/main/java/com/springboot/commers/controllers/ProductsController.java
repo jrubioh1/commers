@@ -81,14 +81,16 @@ public class ProductsController {
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody Product product, BindingResult result, @PathVariable Long id) {
     
-
+        /*
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
 
         Employees employee = serviceEmployee.findByName(name).orElseThrow();
         if (employee == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Employee not found.");
-        }
+        }*/
+
+        Employees employee= serviceEmployee.findById(2L).orElseThrow();
 
         Optional<Product> produOptional = service.update(id, product, employee);
         if (produOptional.isPresent()) {

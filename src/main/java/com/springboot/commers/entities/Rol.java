@@ -2,6 +2,7 @@ package com.springboot.commers.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -28,7 +29,8 @@ public class Rol {
     @Column(unique = true)
     private String name;
     
-    @JsonIgnoreProperties({ "roles", "handler", "hibernateLazyInitializer" })
+   
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<User> users;
 
@@ -74,5 +76,6 @@ public class Rol {
             return false;
         return true;
     }
+
 
 }

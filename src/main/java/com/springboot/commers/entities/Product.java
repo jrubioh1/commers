@@ -32,6 +32,7 @@ public class Product {
     private String name;
     private Double price;
     private Integer stock;
+    private String serial;
 
    
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,10 +56,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Double price, Integer stock) {
+    public Product(String name, Double price, Integer stock, String serial) {
         this.name = name;
         this.price = price;
         this.stock = stock;
+        this.serial=serial;
     }
 
     public Product(Long id) {
@@ -66,6 +68,8 @@ public class Product {
     }
 
     
+    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -93,8 +97,10 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", stock=" + stock + ", createAt="
-                + createAt + ", modifyAt=" + modifyAt + ", linesInvoice=" + linesInvoice + "]";
+        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", stock=" + stock + ", serial=" + serial
+                + ", createBy=" + createBy + ", createAt=" + createAt + ", modifyBy=" + modifyBy + ", modifyAt="
+                + modifyAt + ", linesInvoice=" + linesInvoice + "]";
     }
 
+    
 }

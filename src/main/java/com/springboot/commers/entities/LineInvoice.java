@@ -57,10 +57,6 @@ public class LineInvoice {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((invoice == null) ? 0 : invoice.hashCode());
-        result = prime * result + ((product == null) ? 0 : product.hashCode());
-        result = prime * result + ((amount == null) ? 0 : amount.hashCode());
-        result = prime * result + ((price == null) ? 0 : price.hashCode());
         return result;
     }
 
@@ -78,27 +74,8 @@ public class LineInvoice {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (invoice == null) {
-            if (other.invoice != null)
-                return false;
-        } else if (!invoice.equals(other.invoice))
-            return false;
-        if (product == null) {
-            if (other.product != null)
-                return false;
-        } else if (!product.equals(other.product))
-            return false;
-        if (amount == null) {
-            if (other.amount != null)
-                return false;
-        } else if (!amount.equals(other.amount))
-            return false;
-        if (price == null) {
-            if (other.price != null)
-                return false;
-        } else if (!price.equals(other.price))
-            return false;
         return true;
     }
 
+    
 }

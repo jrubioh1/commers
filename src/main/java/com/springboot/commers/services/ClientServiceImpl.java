@@ -1,5 +1,6 @@
 package com.springboot.commers.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Clients;
+import com.springboot.commers.entities.Rol;
 import com.springboot.commers.repositories.IClienteRepository;
+import com.springboot.commers.repositories.IRolRepository;
 
 
 @Service
@@ -16,6 +19,9 @@ public class ClientServiceImpl implements IClientService{
 
     @Autowired
     private IClienteRepository repository;
+
+    @Autowired
+    private IRolRepository repositoryRol;
 
 
     @Override
@@ -47,11 +53,45 @@ public class ClientServiceImpl implements IClientService{
             clientDb.setName(client.getName()); 
             clientDb.setEmail(client.getEmail());
             clientDb.setPassword(client.getPassword());
-            clientDb.setRoles(client.getRoles());
             return Optional.of(repository.save(clientDb));
 
         }
 
+        return optionalClient;
+    }
+
+    @Override
+    @Transactional()
+    public Optional<Clients> updateRoles(Long id, List<Rol> roles) {
+        
+        Optional<Clients> optionalClient = repository.findById(id);
+        if (optionalClient.isPresent()) {
+            Clients clientDb = optionalClient.get();
+    
+            // Crear una lista de roles existentes
+            List<Rol> rolesDb = new ArrayList<>();
+            
+            // Iterar sobre los roles solicitados y buscar cada uno en la base de datos
+            for (Rol rol : roles) {
+                // Buscar el rol por su nombre
+                Optional<Rol> existingRol = repositoryRol.findByName(rol.getName());
+                if (existingRol.isPresent()) {
+                    // Añadir el rol existente a la lista
+                    rolesDb.add(existingRol.get());
+                } else {
+                    // Si no se encuentra el rol, podrías optar por lanzar una excepción
+                    throw new IllegalArgumentException("Rol no encontrado: " + rol.getName());
+                }
+            }
+    
+            // Asignar los roles existentes al cliente
+            clientDb.setRoles(rolesDb);
+    
+            // Guardar y devolver el cliente actualizado
+            return Optional.of(repository.save(clientDb));
+        }
+    
+        // Retornar vacío si el cliente no fue encontrado
         return optionalClient;
     }
 
