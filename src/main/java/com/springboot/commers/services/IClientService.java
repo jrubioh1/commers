@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.springboot.commers.entities.Clients;
-import com.springboot.commers.entities.Rol;
+
 
 public interface IClientService {
 
@@ -13,6 +13,6 @@ public interface IClientService {
     Clients save(Clients client); 
     Optional<Clients> update(Long id, Clients client);
     Optional<Clients> delete(Long id);
-    Optional<Clients> updateRoles(Long id, List<Rol> roles);
+
 
 }

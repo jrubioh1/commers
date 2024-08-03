@@ -2,12 +2,10 @@ package com.springboot.commers.controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -24,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Clients;
 import com.springboot.commers.entities.Invoice;
-import com.springboot.commers.entities.Product;
-import com.springboot.commers.entities.Rol;
 import com.springboot.commers.services.IClientService;
 import com.springboot.commers.services.IRolService;
 
@@ -34,11 +30,18 @@ import com.springboot.commers.services.IRolService;
 @RequestMapping("/api/clients")
 public class ClientsController {
 
-    @Autowired
-    private IClientService service;
 
-    @Autowired
-    private IRolService serviceRol;
+    private final IClientService service;
+
+    
+    private final IRolService serviceRol;
+
+    
+    //@Autowired
+    public ClientsController(IClientService service, IRolService serviceRol) {
+        this.service = service;
+        this.serviceRol = serviceRol;
+    }
 
     @GetMapping
     public List<Clients> list() {
@@ -100,19 +103,5 @@ public class ClientsController {
         return ResponseEntity.notFound().build();
     }
 
-    
-    @PutMapping("/rol/{id}")
-     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateRoles(@RequestBody List<Rol> roles, @PathVariable Long id) {
-
-    Optional<Clients> optionalClients = service.updateRoles(id, roles);
-        if (optionalClients.isPresent()) {
-            
-
-            return ResponseEntity.ok(optionalClients.orElseThrow());
-
-        }
-        return ResponseEntity.notFound().build();
-    }
 
 }

@@ -1,13 +1,10 @@
 package com.springboot.commers.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,11 +31,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/product")
 public class ProductsController {
 
-    @Autowired
-    IProductsService service;
+    
+   private final IProductsService service;
 
-    @Autowired
-    IEmployeeService serviceEmployee;
+  
+   private final IEmployeeService serviceEmployee;
+
+
+    
+    //@Autowired 
+    public ProductsController(IProductsService service, IEmployeeService serviceEmployee) {
+    this.service = service;
+    this.serviceEmployee = serviceEmployee;
+}
 
     @GetMapping
     // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")

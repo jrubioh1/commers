@@ -3,7 +3,6 @@ package com.springboot.commers.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +12,15 @@ import com.springboot.commers.repositories.IInvoiceRepository;
 @Service
 public class InvoiceServiceImpl  implements IInvoiceService{
 
-    @Autowired
-    private IInvoiceRepository repository; 
+    private final IInvoiceRepository repository; 
+
+
+
     
+    //@Autowired
+    public InvoiceServiceImpl(IInvoiceRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     @Transactional(readOnly = true)

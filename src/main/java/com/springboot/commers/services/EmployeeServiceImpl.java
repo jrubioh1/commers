@@ -3,7 +3,6 @@ package com.springboot.commers.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +12,16 @@ import com.springboot.commers.repositories.IEmployeeRepository;
 @Service
 public class EmployeeServiceImpl  implements IEmployeeService{
 
-    @Autowired
-    private IEmployeeRepository repository; 
+    
+    private final  IEmployeeRepository repository; 
+
+
+
+
+    //@Autowired
+    public EmployeeServiceImpl(IEmployeeRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     @Transactional(readOnly = true)

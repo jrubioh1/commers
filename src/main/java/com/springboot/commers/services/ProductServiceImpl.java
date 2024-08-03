@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +14,15 @@ import com.springboot.commers.repositories.IProductRepository;
 @Service
 public class ProductServiceImpl implements IProductsService {
 
-    @Autowired
-    private IProductRepository repository;
+
+    private final IProductRepository repository;
+
+
+    //@Autowired
+        public ProductServiceImpl(IProductRepository repository) {
+        this.repository = repository;
+    }
+
 
     @Override
     @Transactional()
@@ -28,6 +34,7 @@ public class ProductServiceImpl implements IProductsService {
 
        return optionalProduct; 
     }
+
 
     @Override
     @Transactional(readOnly = true)
