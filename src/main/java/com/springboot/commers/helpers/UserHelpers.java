@@ -36,7 +36,7 @@ public class UserHelpers {
 
 
 
-    @Transactional()
+    @Transactional(readOnly = true)
     public List<Rol> listOfRolesDb (List<Rol> roles) {
 
             List<Rol> rolesDb = new ArrayList<>();
