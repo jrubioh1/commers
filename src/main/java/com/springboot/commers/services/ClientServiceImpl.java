@@ -54,29 +54,15 @@ public class ClientServiceImpl implements IClientService {
     @Override
     @Transactional()
     public Optional<Clients> update(Long id, Clients client) {
-        Optional<Clients> optionalClient = repository.findById(id);
-        if (optionalClient.isPresent()) {
-            Clients clientDb = optionalClient.orElseThrow();
-            clientDb.setName(client.getName());
-            clientDb.setEmail(client.getEmail());
-            clientDb.setPassword(client.getPassword());
-            clientDb.setRoles( userHelpers.listOfRolesDb(client.getRoles()));
-            return Optional.of(repository.save(clientDb));
-
-        }
-
-        return optionalClient;
+      Clients clientUpdated = (Clients) userHelpers.updateUser(id, client).orElseThrow();
+      return Optional.of(clientUpdated);
     }
 
     @Override
     @Transactional()
     public Optional<Clients> delete(Long id) {
-        Optional<Clients> optionalClient = repository.findById(id);
-        optionalClient.ifPresent(((clientDb) -> {
-            repository.delete(clientDb);
-
-        }));
-        return optionalClient;
+        Clients clientDeleted = (Clients) userHelpers.deleteUser(id).orElseThrow();
+        return Optional.of(clientDeleted);
 
     }
 

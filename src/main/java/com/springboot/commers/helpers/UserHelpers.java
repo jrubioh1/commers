@@ -2,15 +2,13 @@ package com.springboot.commers.helpers;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import com.springboot.commers.entities.Rol;
-
+import com.springboot.commers.entities.User;
 import com.springboot.commers.repositories.IUsersRepository;
 import com.springboot.commers.services.IRolService;
 
@@ -31,6 +29,35 @@ public class UserHelpers {
     public UserHelpers(IUsersRepository userRepository, IRolService rolService){
         this.repository=userRepository;
         this.serviceRol=rolService;
+    }
+
+
+    @Transactional()
+    public Optional<User> updateUser(Long id, User user) {
+        Optional<User> optionalUser = repository.findById(id);
+        if (optionalUser.isPresent()) {
+            User userDB = optionalUser.orElseThrow();
+            userDB.setName(user.getName());
+            userDB.setEmail(user.getEmail());
+            userDB.setPassword(user.getPassword());
+            userDB.setRoles(listOfRolesDb(user.getRoles()));
+            return Optional.of(repository.save(userDB));
+
+        }
+
+        return optionalUser;
+    }
+
+  
+    @Transactional()
+    public Optional<User> deleteUser(Long id) {
+        Optional<User> optionalUser = repository.findById(id);
+        optionalUser.ifPresent(((userDb) -> {
+            repository.delete(userDb);
+
+        }));
+        return optionalUser;
+
     }
 
 

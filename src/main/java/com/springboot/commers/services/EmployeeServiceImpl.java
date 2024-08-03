@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Employees;
+import com.springboot.commers.helpers.UserHelpers;
 import com.springboot.commers.repositories.IEmployeeRepository;
 
 @Service
@@ -17,17 +18,22 @@ public class EmployeeServiceImpl  implements IEmployeeService{
 
 
 
+    private final UserHelpers userHelpers;
+
+
 
     //@Autowired
-    public EmployeeServiceImpl(IEmployeeRepository repository) {
-        this.repository = repository;
-    }
-
+   
     @Override
     @Transactional(readOnly = true)
     public List<Employees> findAll() {
         
         return (List<Employees>)repository.findAll();
+    }
+
+    public EmployeeServiceImpl(IEmployeeRepository repository, UserHelpers userHelpers) {
+        this.repository = repository;
+        this.userHelpers = userHelpers;
     }
 
     @Override
@@ -49,29 +55,15 @@ public class EmployeeServiceImpl  implements IEmployeeService{
     @Override
     @Transactional()
     public Optional<Employees> update(Long id, Employees employee) {
-        Optional<Employees> optionalEmployee= repository.findById(id);
-        if(optionalEmployee.isPresent()){
-            Employees employeeDb= optionalEmployee.orElseThrow();
-            employeeDb.setEmail(employee.getEmail());
-            employeeDb.setName(employee.getName());
-            employeeDb.setPassword(employee.getPassword());
-            employeeDb.setRoles(employee.getRoles());
-            return Optional.of(repository.save(employeeDb));
-        } 
-
-        return optionalEmployee; 
-
+        Employees employeeUpdated = (Employees) userHelpers.updateUser(id, employee).orElseThrow();
+        return Optional.of(employeeUpdated);
     }
 
     @Override
     @Transactional()
     public Optional<Employees> delete(Long id) {
-        Optional<Employees> optonalEmployee= repository.findById(id);
-        optonalEmployee.ifPresent(employeeDb->{
-             repository.delete(employeeDb);
-        });
-
-        return optonalEmployee;
+        Employees employeeDeleted = (Employees) userHelpers.deleteUser(id).orElseThrow();
+        return Optional.of(employeeDeleted);
 
     }
 
