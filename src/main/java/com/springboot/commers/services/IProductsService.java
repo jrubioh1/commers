@@ -13,6 +13,7 @@ public interface IProductsService {
     Product save(Product product, Employees employee);
     Optional<Product> update(Long id, Product product, Employees employee);
     Optional<Product> delete(Long id);
+    Product saveStock(Product product);
 
 
 }

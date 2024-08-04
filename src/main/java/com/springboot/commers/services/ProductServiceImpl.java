@@ -73,6 +73,12 @@ public class ProductServiceImpl implements IProductsService {
         }
 
         return optionalProduct; 
+    }
+
+
+    @Override
+    public Product saveStock(Product product) {
+        return repository.save(product);
     } 
 
 

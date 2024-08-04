@@ -30,8 +30,10 @@ public class LineInvoice {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    private Integer quantity;
+
     private Double amount;
-    private Double price;
+
 
     public LineInvoice() {
     }
@@ -46,10 +48,12 @@ public class LineInvoice {
         this.id = id;
     }
 
+    
+
     @Override
     public String toString() {
-        return "LineInvoice [id=" + id + ", invoice=" + invoice + ", product=" + product + ", amount=" + amount
-                + ", price=" + price + "]";
+        return "LineInvoice [id=" + id + ", invoice=" + invoice + ", product=" + product + ", quantity=" + quantity
+                + ", amount=" + amount + "]";
     }
 
     @Override
