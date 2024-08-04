@@ -3,35 +3,33 @@ package com.springboot.commers.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Invoice;
-
+import com.springboot.commers.entities.LineInvoice;
 import com.springboot.commers.repositories.IInvoiceRepository;
-
 
 //PARA CORREGIR EL ERROR DE DEPENDENCIA CICLICA, TENGO QUE ENCARGAME DE ASIGNAR LA FACTURA A LA LINEA DESDE AQUI
 //MODIFICAR EL UPDATE PORQUE YA NO SE VA CREAR LA LINEAS ANTES, ASIQUE HAY QUE CREARLAS PARA LUEGO UPDATE
-
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
 
     private final IInvoiceRepository repository;
 
-
     private final IClientService serviceClient;
     private final ILineInvoiceService serviceLine;
     private final IEmployeeService serviceEmployee;
 
     // @Autowired
-    //public InvoiceServiceImpl(IInvoiceRepository repository, 
+    public InvoiceServiceImpl(IInvoiceRepository repository,
             IClientService serviceClient, ILineInvoiceService serviceLine, IEmployeeService serviceEmployee) {
         this.repository = repository;
-  
+
         this.serviceClient = serviceClient;
         this.serviceLine = serviceLine;
         this.serviceEmployee = serviceEmployee;
@@ -55,6 +53,10 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
         invoice.setEmployee(serviceEmployee.getEmployeeDb(employee));
         invoice.setClient(serviceClient.getClientDb(invoice.getClient()));
+
+        List<LineInvoice> lines = invoice.getLinesInvoice().stream().map(line -> serviceLine.save(line))
+                .collect(Collectors.toList());
+        invoice.setLinesInvoice(lines);
         return repository.save(invoice);
     }
 
@@ -74,11 +76,15 @@ public class InvoiceServiceImpl implements IInvoiceService {
             // el employe se tiene que pasar ya de tipo employye db si no hacerlo antes aqui
             invoiceDb.setEmployee(employee);
 
-            if (!invoiceDb.getLinesInvoice().isEmpty()) {
-                serviceLine.removeLineInvoicesDb(invoiceDb.getLinesInvoice());
-            }
+            invoiceDb.getLinesInvoice().forEach(line -> serviceLine.delete(line.getId()));
 
-            invoiceDb.setLinesInvoice(serviceLine.getLineInvoicesDb(invoice.getLinesInvoice()));
+            List<LineInvoice> lines = invoice.getLinesInvoice().stream().map(line -> {
+                line.setInvoice(invoiceDb);
+                return serviceLine.save(line);
+
+            }).collect(Collectors.toList());
+
+            invoiceDb.setLinesInvoice(lines);
             invoiceDb.setDateTime(LocalDateTime.now());
             Double whole = invoice.getLinesInvoice().stream()
                     .mapToDouble(line -> line.getAmount())
@@ -96,6 +102,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public Optional<Invoice> delete(Long id) {
         Optional<Invoice> optionalInvoice = repository.findById(id);
         optionalInvoice.ifPresent(invoiceDb -> {
+            invoiceDb.getLinesInvoice().forEach(line -> serviceLine.delete(line.getId()));
             repository.delete(invoiceDb);
         });
 
@@ -105,7 +112,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     @Transactional(readOnly = true)
     public Invoice getInvoiceDb(Invoice invoice) {
-       return repository.findById(invoice.getId()).orElseThrow();
+        return repository.findById(invoice.getId()).orElseThrow();
     }
 
 }
