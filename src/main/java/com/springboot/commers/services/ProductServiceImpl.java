@@ -83,7 +83,7 @@ public class ProductServiceImpl implements IProductsService {
     @Transactional(readOnly = true)
     @Override
     public Product getProductDb(Product product){
-        return repository.findById(product.getId()).get();
+        return repository.findById(product.getId()).orElseThrow();
     }
 
     @Transactional()
@@ -102,7 +102,7 @@ public class ProductServiceImpl implements IProductsService {
     public List<Product> listOfProductDb(List<Product> products){
 
         return products.stream()
-    .map(product -> repository.findById(product.getId()).get())
+    .map(product -> repository.findById(product.getId()).orElseThrow())
     .collect(Collectors.toList());
     }
 }

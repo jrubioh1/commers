@@ -65,10 +65,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     @Override
     @Transactional()
-    // como se crean las facturas en vacio una vez se hayan creado las lineas de
-    // factura correspondiente de manda un objecto factura con las lines para que se
-    // complete la factura-------
-    // si la factura ya esta completa se borran las lineas y se update
     public Optional<Invoice> update(Long id, Invoice invoice, Employees employee) {
 
         Optional<Invoice> optionalInvoice = findById(id);
