@@ -14,6 +14,9 @@ public interface IProductsService {
     Optional<Product> update(Long id, Product product, Employees employee);
     Optional<Product> delete(Long id);
     Product saveStock(Product product);
+    Product getProductDb(Product product);
+    Integer fixedStockProduct( Long id, Integer quantity);
+    List<Product> listOfProductDb(List<Product> products);
 
 
 }

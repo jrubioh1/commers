@@ -1,5 +1,8 @@
 package com.springboot.commers.helpers;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,6 +69,33 @@ public class UserHelpers {
                 .map(rol -> serviceRol.findByName(rol.getName())
                         .orElseThrow(() -> new RuntimeException("Role not found: " + rol.getName())))
                 .collect(Collectors.toList());
+    }
+
+
+     public static String generateUserSerial(String name, String email, String hireDate) {
+        try {
+      
+            String input = name + email + hireDate;
+
+        
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+         
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error al generar el hash: " + e.getMessage(), e);
+        }
     }
 
 }

@@ -28,7 +28,7 @@ public class Employees extends User {
     @OneToMany(mappedBy = "modifyBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> productsUpdated=new ArrayList<>();
 
-
+ 
     private Boolean active=true;
 
     public Employees() {

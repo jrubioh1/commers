@@ -13,6 +13,7 @@ public interface IEmployeeService {
     Optional<Employees> update(Long id, Employees employee);
     Optional<Employees> delete(Long id); 
     Optional<Employees> findByName(String name);
+    Employees getEmployeeDb(Employees employee);
 
 
 }

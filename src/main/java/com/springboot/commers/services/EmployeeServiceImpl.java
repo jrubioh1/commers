@@ -1,5 +1,6 @@
 package com.springboot.commers.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +64,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         List<Rol> rolesDb = userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
 
         employee.setRoles(rolesDb);
+        employee.setSerialUser(UserHelpers.generateUserSerial(employee.getName(), employee.getEmail(), LocalDate.now().toString()));
         return repository.save(employee);
 
     }
@@ -87,5 +89,11 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public Optional<Employees> findByName(String name) {
         return repository.findByName(name);
     }
+
+    @Transactional(readOnly = true)
+    public Employees getEmployeeDb(Employees employee){ return repository.findById(employee.getId()).orElseThrow();}
+
+    
+   
 
 }

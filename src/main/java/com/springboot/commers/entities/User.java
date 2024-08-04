@@ -29,6 +29,9 @@ public class User {
     @NotBlank
     private String password;
 
+    @Column(name = "serial_user")
+    private String serialUser; 
+
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(

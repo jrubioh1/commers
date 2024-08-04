@@ -20,32 +20,30 @@ import lombok.Setter;
 public class Clients extends User {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Invoice> invoices=new ArrayList<>();;
+    private List<Invoice> invoices = new ArrayList<>();
 
-       public Clients() {
+
+    
+    public Clients() {
     }
-
 
     public Clients(String name, String email, String password, List<Rol> roles, List<Invoice> invoices) {
         super(name, email, password, roles);
         this.invoices = invoices;
     }
 
-
     public Clients(Long id) {
         super(id);
     }
 
-
     @Override
     public int hashCode() {
-       return super.hashCode();
+        return super.hashCode();
     }
-
 
     @Override
     public boolean equals(Object obj) {
-   
-       return  super.equals(obj);
+
+        return super.equals(obj);
     }
 }

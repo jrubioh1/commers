@@ -12,5 +12,5 @@ public interface IInvoiceService {
     Invoice save(Invoice invoice, Employees employee);
     Optional<Invoice>  update(Long id, Invoice invoice, Employees employee);
     Optional<Invoice> delete(Long id);
-
+    Invoice getInvoiceDb(Invoice invoice);
 }

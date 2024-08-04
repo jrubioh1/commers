@@ -13,6 +13,7 @@ public interface IClientService {
     Clients save(Clients client); 
     Optional<Clients> update(Long id, Clients client);
     Optional<Clients> delete(Long id);
+    Clients getClientDb(Clients client);
 
 
 }

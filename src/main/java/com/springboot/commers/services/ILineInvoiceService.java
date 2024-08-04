@@ -13,7 +13,7 @@ public interface ILineInvoiceService {
     LineInvoice save(LineInvoice line);
     Optional<LineInvoice> update(Long id, LineInvoice line);
     Optional<LineInvoice> delete(Long id); 
-
-
+    List<LineInvoice> getLineInvoicesDb(List<LineInvoice> lines);
+    List<LineInvoice> removeLineInvoicesDb(List<LineInvoice> lines);
 
 }

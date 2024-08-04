@@ -1,5 +1,6 @@
 package com.springboot.commers.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +66,7 @@ public class ClientServiceImpl implements IClientService {
 
         List<Rol> rolesDb=userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
         client.setRoles( rolesDb);
+        client.setSerialUser(UserHelpers.generateUserSerial(client.getName(), client.getEmail(), LocalDate.now().toString()));
         return repository.save(client);
     }
 
@@ -82,5 +84,12 @@ public class ClientServiceImpl implements IClientService {
         return Optional.of(clientDeleted);
 
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Clients getClientDb(Clients client) {
+        return repository.findById(client.getId()).orElseThrow();
+    }
+
 
 }

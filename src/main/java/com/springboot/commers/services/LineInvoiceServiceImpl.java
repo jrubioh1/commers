@@ -2,31 +2,38 @@ package com.springboot.commers.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springboot.commers.entities.Invoice;
+
 import com.springboot.commers.entities.LineInvoice;
 import com.springboot.commers.entities.Product;
-import com.springboot.commers.helpers.InvoiceHelpers;
+
 import com.springboot.commers.repositories.ILinesRepository;
 
+@Service
 public class LineInvoiceServiceImpl implements ILineInvoiceService {
 
     private final ILinesRepository repository;
+    private final IProductsService serviceProduct;
 
-    private final InvoiceHelpers invoiceHelpers;
+
+
 
     // @Autowired
-    public LineInvoiceServiceImpl(ILinesRepository repository, InvoiceHelpers invoiceHelpers) {
-        this.repository = repository;
-        this.invoiceHelpers = invoiceHelpers;
-    }
-
     @Override
     @Transactional(readOnly = true)
     public List<LineInvoice> findAll() {
         return (List<LineInvoice>) repository.findAll();
+    }
+
+
+    public LineInvoiceServiceImpl(ILinesRepository repository, IProductsService serviceProduct) {
+        this.repository = repository;
+        this.serviceProduct = serviceProduct;
+ 
     }
 
 
@@ -39,11 +46,10 @@ public class LineInvoiceServiceImpl implements ILineInvoiceService {
     @Override
     @Transactional
     public LineInvoice save(LineInvoice line) {
-        Product productDb = invoiceHelpers.getProductDb(line.getProduct());
-        Invoice invoiceDb = invoiceHelpers.getInvoiceDb(line.getInvoice());
-        invoiceHelpers.fixedStockProduct(line.getProduct().getId(), -line.getQuantity());
+        Product productDb = serviceProduct.getProductDb(line.getProduct());
+        serviceProduct.fixedStockProduct(line.getProduct().getId(), -line.getQuantity());
         line.setProduct(productDb);
-        line.setInvoice(invoiceDb);
+        line.setInvoice(line.getInvoice());
 
         return repository.save(line);
     }
@@ -54,11 +60,11 @@ public class LineInvoiceServiceImpl implements ILineInvoiceService {
         Optional<LineInvoice> lineOptional = findById(id);
         if (lineOptional.isPresent()) {
             LineInvoice lineInvoiceDb = lineOptional.get();
-            lineInvoiceDb.setProduct(invoiceHelpers.getProductDb(line.getProduct()));
+            lineInvoiceDb.setProduct(serviceProduct.getProductDb(line.getProduct()));
             lineInvoiceDb.setQuantity(line.getQuantity());
             lineInvoiceDb.setAmount(lineInvoiceDb.getProduct().getPrice()*lineInvoiceDb.getQuantity());
             Integer difStock=line.getQuantity()-lineInvoiceDb.getQuantity();
-            invoiceHelpers.fixedStockProduct(lineInvoiceDb.getProduct().getId(), difStock);
+            serviceProduct.fixedStockProduct(lineInvoiceDb.getProduct().getId(), difStock);
             return Optional.of(repository.save(lineInvoiceDb));
         }
 
@@ -71,11 +77,25 @@ public class LineInvoiceServiceImpl implements ILineInvoiceService {
 
         Optional<LineInvoice> lineOptional = repository.findById(id);
         lineOptional.ifPresent(lineDb -> {
-            invoiceHelpers.fixedStockProduct(lineDb.getProduct().getId(), lineDb.getQuantity());
+            serviceProduct.fixedStockProduct(lineDb.getProduct().getId(), lineDb.getQuantity());
             repository.delete(lineDb);
         });
 
         return lineOptional;
     }
+
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<LineInvoice> getLineInvoicesDb(List<LineInvoice> lines){
+
+    return lines.stream().map(line-> repository.findById(line.getId()).get()).collect(Collectors.toList());
+    }
+    @Override
+    @Transactional
+    public List<LineInvoice> removeLineInvoicesDb(List<LineInvoice> lines){
+
+        return lines.stream().map(line-> delete(line.getId()).get()).collect(Collectors.toList());
+        }
 
 }

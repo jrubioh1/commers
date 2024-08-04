@@ -75,6 +75,8 @@ public class ProductsController {
         if (employee == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Employee not found.");
         } */
+
+        //hay que asegurarse que cuando pase un employee sea el de db
         Employees employee = serviceEmployee.findById(1L).orElseThrow();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(product, employee));
