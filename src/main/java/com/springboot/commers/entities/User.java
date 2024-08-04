@@ -1,5 +1,6 @@
 package com.springboot.commers.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,7 +37,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
     @NotEmpty
-    private List<Rol> roles;
+    private List<Rol> roles=new ArrayList<>();;
 
     public User() {
     }

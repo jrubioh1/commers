@@ -1,5 +1,6 @@
 -- Inserta roles si no existen
 INSERT INTO rol (name) VALUES ('ROLE_ADMIN') ON CONFLICT DO NOTHING;
+INSERT INTO rol (name) VALUES ('ROLE_EMPLOYEE') ON CONFLICT DO NOTHING;
 INSERT INTO rol (name) VALUES ('ROLE_CLIENT') ON CONFLICT DO NOTHING;
 
 -- Insertar usuarios (empleados) con rol de administrador
@@ -12,9 +13,16 @@ INSERT INTO users (name, email, password) VALUES ('Employee5', 'employee5@exampl
 -- Asociar los usuarios con el rol de administrador
 INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_ADMIN') FROM users WHERE email = 'employee1@example.com';
 INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_ADMIN') FROM users WHERE email = 'employee2@example.com';
-INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_ADMIN') FROM users WHERE email = 'employee3@example.com';
-INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_ADMIN') FROM users WHERE email = 'employee4@example.com';
-INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_ADMIN') FROM users WHERE email = 'employee5@example.com';
+
+
+-- Asociar los usuarios con el rol de employee
+
+INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_EMPLOYEE') FROM users WHERE email = 'employee1@example.com';
+INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_EMPLOYEE') FROM users WHERE email = 'employee2@example.com';
+INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_EMPLOYEE') FROM users WHERE email = 'employee3@example.com';
+INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_EMPLOYEE') FROM users WHERE email = 'employee4@example.com';
+INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_EMPLOYEE') FROM users WHERE email = 'employee5@example.com';
+
 
 -- Insertar empleados
 INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee1@example.com';

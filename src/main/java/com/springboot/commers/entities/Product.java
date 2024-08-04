@@ -1,6 +1,7 @@
 package com.springboot.commers.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,7 +52,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<LineInvoice> linesInvoice;
+    private List<LineInvoice> linesInvoice=new ArrayList<>();;
 
     public Product() {
     }

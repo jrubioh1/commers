@@ -1,13 +1,13 @@
 package com.springboot.commers.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.springboot.commers.entities.Clients;
-
+import com.springboot.commers.entities.Rol;
 import com.springboot.commers.repositories.IClienteRepository;
 
 import com.springboot.commers.helpers.UserHelpers;
@@ -19,6 +19,7 @@ public class ClientServiceImpl implements IClientService {
     private final IClienteRepository repository;
 
 
+
     private final UserHelpers userHelpers;
 
 
@@ -26,15 +27,17 @@ public class ClientServiceImpl implements IClientService {
 
 
     //@Autowired
-    public ClientServiceImpl(IClienteRepository repository, UserHelpers userHelpers) {
-        this.repository = repository;
-        this.userHelpers = userHelpers;
-    }
+    
 
     @Override
     @Transactional(readOnly = true)
     public List<Clients> findAll() {
         return (List<Clients>) repository.findAll();
+    }
+
+    public ClientServiceImpl(IClienteRepository repository, UserHelpers userHelpers) {
+        this.repository = repository;
+        this.userHelpers = userHelpers;
     }
 
     @Override
@@ -47,7 +50,21 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     @Transactional()
+    // el rol de cliente se pondra siempre por defecto, pero en la vista no saldra disponible para ponerlo, evitando asi duplicidades, solo dejara poner o quitar roles adicionales para acumulacion de privilegios
     public Clients save(Clients client) {
+        
+
+        Rol clientRol= new Rol();
+        clientRol.setName("ROLE_CLIENT");
+
+        List<Rol> roles= new ArrayList<>();
+        roles.add(clientRol);
+        client.getRoles().forEach((rol)->{
+            roles.add(rol);
+        });
+
+        List<Rol> rolesDb=userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
+        client.setRoles( rolesDb);
         return repository.save(client);
     }
 

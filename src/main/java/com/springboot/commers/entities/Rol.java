@@ -1,5 +1,6 @@
 package com.springboot.commers.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,7 +32,7 @@ public class Rol {
    
     @JsonIgnore
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<User> users;
+    private List<User> users=new ArrayList<>();;
 
     public Rol() {
     }

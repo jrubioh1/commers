@@ -21,9 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Clients;
-import com.springboot.commers.entities.Invoice;
 import com.springboot.commers.services.IClientService;
-import com.springboot.commers.services.IRolService;
+
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 @RestController
@@ -34,13 +33,13 @@ public class ClientsController {
     private final IClientService service;
 
     
-    private final IRolService serviceRol;
+  
 
     
     //@Autowired
-    public ClientsController(IClientService service, IRolService serviceRol) {
+    public ClientsController(IClientService service) {
         this.service = service;
-        this.serviceRol = serviceRol;
+      
     }
 
     @GetMapping
@@ -62,16 +61,12 @@ public class ClientsController {
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody Clients client) {
 
-        client.setRoles(Arrays.asList(serviceRol.findByName("ROLE_CLIENT").orElseThrow()));
-        client.setInvoices(new ArrayList<Invoice>());
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Clients client) {
 
-        client.setRoles(Arrays.asList(serviceRol.findByName("ROLE_CLIENT").orElseThrow()));
-        client.setInvoices(new ArrayList<Invoice>());
         return create(client);
     }
 

@@ -1,5 +1,6 @@
 package com.springboot.commers.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -19,13 +20,13 @@ import lombok.Setter;
 public class Employees extends User {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Invoice> invoices;
+    private List<Invoice> invoices=new ArrayList<>();
 
     @OneToMany(mappedBy = "createBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Product> productsCreated;
+    private List<Product> productsCreated= new ArrayList<>();
 
     @OneToMany(mappedBy = "modifyBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Product> productsUpdated;
+    private List<Product> productsUpdated=new ArrayList<>();
 
     public Employees() {
     }

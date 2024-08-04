@@ -1,34 +1,32 @@
 package com.springboot.commers.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Employees;
+import com.springboot.commers.entities.Rol;
 import com.springboot.commers.helpers.UserHelpers;
 import com.springboot.commers.repositories.IEmployeeRepository;
 
 @Service
-public class EmployeeServiceImpl  implements IEmployeeService{
+public class EmployeeServiceImpl implements IEmployeeService {
 
-    
-    private final  IEmployeeRepository repository; 
-
-
+    private final IEmployeeRepository repository;
 
     private final UserHelpers userHelpers;
 
+    // @Autowired
 
-
-    //@Autowired
-   
     @Override
     @Transactional(readOnly = true)
     public List<Employees> findAll() {
-        
-        return (List<Employees>)repository.findAll();
+
+        return (List<Employees>) repository.findAll();
     }
 
     public EmployeeServiceImpl(IEmployeeRepository repository, UserHelpers userHelpers) {
@@ -42,13 +40,30 @@ public class EmployeeServiceImpl  implements IEmployeeService{
     public Optional<Employees> findById(Long id) {
 
         return repository.findById(id);
-        
+
     }
 
     @Override
     @Transactional()
+    // el rol de empleado se pondra siempre por defecto, pero en la vista no saldra
+    // disponible para ponerlo, evitando asi duplicidades, solo dejara poner o
+    // quitar roles adicionales para acumulacion de privilegios
     public Employees save(Employees employee) {
-       return repository.save(employee);
+
+        Rol employeetRol = new Rol();
+        employeetRol.setName("ROLE_EMPLOYEE");
+
+        List<Rol> roles = new ArrayList<>();
+        roles.add(employeetRol);
+        employee.getRoles().forEach((rol) -> {
+
+            roles.add(rol);
+        });
+
+         List<Rol> rolesDb=userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
+
+        employee.setRoles(rolesDb);
+        return repository.save(employee);
 
     }
 

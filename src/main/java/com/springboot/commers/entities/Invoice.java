@@ -1,6 +1,7 @@
 package com.springboot.commers.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -26,7 +27,7 @@ public class Invoice {
     private Long id;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LineInvoice> linesInvoice;
+    private List<LineInvoice> linesInvoice=new ArrayList<>();;
 
     private Double whole;
 
