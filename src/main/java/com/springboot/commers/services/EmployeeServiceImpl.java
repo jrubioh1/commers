@@ -60,7 +60,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
             roles.add(rol);
         });
 
-         List<Rol> rolesDb=userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
+        List<Rol> rolesDb = userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
 
         employee.setRoles(rolesDb);
         return repository.save(employee);

@@ -10,10 +10,10 @@ INSERT INTO users (name, email, password) VALUES ('Employee3', 'employee3@exampl
 INSERT INTO users (name, email, password) VALUES ('Employee4', 'employee4@example.com', 'password4');
 INSERT INTO users (name, email, password) VALUES ('Employee5', 'employee5@example.com', 'password5');
 
+
 -- Asociar los usuarios con el rol de administrador
 INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_ADMIN') FROM users WHERE email = 'employee1@example.com';
 INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_ADMIN') FROM users WHERE email = 'employee2@example.com';
-
 
 -- Asociar los usuarios con el rol de employee
 
@@ -25,11 +25,11 @@ INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE n
 
 
 -- Insertar empleados
-INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee1@example.com';
-INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee2@example.com';
-INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee3@example.com';
-INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee4@example.com';
-INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee5@example.com';
+INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee1@example.com';
+INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee2@example.com';
+INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee3@example.com';
+INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee4@example.com';
+INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee5@example.com';
 
 -- Inserta usuarios (clientes)
 INSERT INTO users (name, email, password) VALUES ('John Doe', 'john.doe@example.com', 'password123');

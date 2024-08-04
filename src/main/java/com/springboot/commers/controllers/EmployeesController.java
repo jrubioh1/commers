@@ -78,10 +78,28 @@ public class EmployeesController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Employees> optionalEmployee = service.delete(id);
         if (optionalEmployee.isPresent()) {
+
             return ResponseEntity.ok(optionalEmployee.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
+
+
+
+    @PutMapping("status/{id}")
+    // @PreAuthorize("hasRole('ADMIN')")
+   public ResponseEntity<?> switchStatusEmployee(@PathVariable Long id) {
+
+
+       Optional<Employees> optionalEmployee = service.findById(id);
+       if (optionalEmployee.isPresent()) {
+           Employees employee=optionalEmployee.get();
+           employee.setActive(!employee.getActive());
+           return ResponseEntity.ok(service.update(id,employee));
+
+       }
+       return ResponseEntity.notFound().build();
+   }
 
 
 
