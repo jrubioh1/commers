@@ -30,13 +30,13 @@ public class LineInvoice {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer amount;
+    private Double amount;
     private Double price;
 
     public LineInvoice() {
     }
 
-    public LineInvoice(Invoice invoice, Product product, Integer amount) {
+    public LineInvoice(Invoice invoice, Product product, Double amount) {
         this.invoice = invoice;
         this.product = product;
         this.amount = amount;

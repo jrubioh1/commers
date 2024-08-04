@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +16,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,30 +33,35 @@ public class Invoice {
     private Long id;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LineInvoice> linesInvoice=new ArrayList<>();;
+    @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
+    @NotEmpty
+    private List<LineInvoice> linesInvoice = new ArrayList<>();;
 
+    
     private Double whole;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
+    @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password","hibernateLazyInitializer", "handler"})
+    @NotNull
     private Employees employee;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" , "invoices"})
+    @NotNull
     private Clients client;
 
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime= LocalDateTime.now();
 
     public Invoice() {
     }
 
-    public Invoice(List<LineInvoice> linesInvoice, Double whole, Employees employee, Clients client,
-            LocalDateTime dateTime) {
+    public Invoice(List<LineInvoice> linesInvoice, Double whole, Employees employee, Clients client) {
         this.linesInvoice = linesInvoice;
         this.whole = whole;
         this.employee = employee;
         this.client = client;
-        this.dateTime = dateTime;
     }
 
     public Invoice(Long id) {
@@ -87,7 +98,5 @@ public class Invoice {
             return false;
         return true;
     }
-
-    
 
 }
