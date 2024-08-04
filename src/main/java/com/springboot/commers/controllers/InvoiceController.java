@@ -34,8 +34,9 @@ public class InvoiceController {
     private final IEmployeeService serviceEm;
 
     //@Autowired
-    public InvoiceController(IInvoiceService service) {
+    public InvoiceController(IInvoiceService service, IEmployeeService serviceEm) {
         this.service = service;
+        this.serviceEm = serviceEm;
     }
 
   
@@ -47,7 +48,9 @@ public class InvoiceController {
 
     }
 
-       @PostMapping
+      
+
+    @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create( @RequestBody Invoice invoice) {
           // validation.validate(product, result);
