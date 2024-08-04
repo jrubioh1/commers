@@ -2,7 +2,10 @@ package com.springboot.commers.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -76,13 +79,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
             // el employe se tiene que pasar ya de tipo employye db si no hacerlo antes aqui
             invoiceDb.setEmployee(employee);
 
-            invoiceDb.getLinesInvoice().forEach(line -> serviceLine.delete(line.getId()));
-
-            List<LineInvoice> lines = invoice.getLinesInvoice().stream().map(line -> {
-                line.setInvoice(invoiceDb);
-                return serviceLine.save(line);
-
-            }).collect(Collectors.toList());
+            List<LineInvoice> lines = updateLinesInvoice(invoiceDb.getLinesInvoice(), invoice.getLinesInvoice());
 
             invoiceDb.setLinesInvoice(lines);
             invoiceDb.setDateTime(LocalDateTime.now());
@@ -113,6 +110,43 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Transactional(readOnly = true)
     public Invoice getInvoiceDb(Invoice invoice) {
         return repository.findById(invoice.getId()).orElseThrow();
+    }
+
+    @Override
+    public List<LineInvoice> updateLinesInvoice(List<LineInvoice> linesDb, List<LineInvoice> newLines) {
+        Set<Long> newLineIds = newLines.stream()
+                .map(LineInvoice::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        // Eliminar líneas que ya no están en newLines
+        linesDb.stream()
+                .filter(lineDb -> !newLineIds.contains(lineDb.getId()))
+                .forEach(lineDb -> {
+                    serviceLine.delete(lineDb.getId());
+                    System.out.println("Deleted line with ID: " + lineDb.getId());
+                });
+
+        // Actualizar o guardar líneas nuevas
+        List<LineInvoice> finalLineInvoices = newLines.stream()
+                .map(line -> {
+                    if (line.getId() != null) {
+                        // Actualizar línea existente
+                        return serviceLine.update(line.getId(), line)
+                                .orElseGet(() -> {
+                                    // Log de error si la actualización falla
+                                    System.err.println("Failed to update line with ID: " + line.getId());
+                                    return line; // Devolver la línea sin cambios en caso de error
+                                });
+                    } else {
+                        // Guardar nueva línea
+                        LineInvoice savedLine = serviceLine.save(line);
+                        return savedLine;
+                    }
+                })
+                .collect(Collectors.toList());
+
+        return finalLineInvoices;
     }
 
 }

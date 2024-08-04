@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Invoice;
+import com.springboot.commers.entities.LineInvoice;
 
 public interface IInvoiceService {
     List<Invoice> findAll();
@@ -13,4 +14,5 @@ public interface IInvoiceService {
     Optional<Invoice>  update(Long id, Invoice invoice, Employees employee);
     Optional<Invoice> delete(Long id);
     Invoice getInvoiceDb(Invoice invoice);
+    List<LineInvoice> updateLinesInvoice(List<LineInvoice> linesDb, List<LineInvoice> newLines) ;
 }

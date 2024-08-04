@@ -2,6 +2,7 @@ package com.springboot.commers.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,22 @@ public class LineInvoiceServiceImpl implements ILineInvoiceService {
         return repository.save(line);
     }
 
+    @Override
+    @Transactional
+    public Optional<LineInvoice> update(Long id, LineInvoice line) {
+        Optional<LineInvoice> lineOptional = findById(id);
+        if (lineOptional.isPresent()) {
+            LineInvoice lineInvoiceDb = lineOptional.get();
+            lineInvoiceDb.setProduct(serviceProduct.getProductDb(line.getProduct()));
+            lineInvoiceDb.setQuantity(line.getQuantity());
+            lineInvoiceDb.setAmount(lineInvoiceDb.getProduct().getPrice()*lineInvoiceDb.getQuantity());
+            Integer difStock=line.getQuantity()-lineInvoiceDb.getQuantity();
+            serviceProduct.fixedStockProduct(lineInvoiceDb.getProduct().getId(), difStock);
+            return Optional.of(repository.save(lineInvoiceDb));
+        }
+
+        return lineOptional;
+    }
 
     @Override
     @Transactional
@@ -67,4 +84,5 @@ public class LineInvoiceServiceImpl implements ILineInvoiceService {
 
     
     
+
 }

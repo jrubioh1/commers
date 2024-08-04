@@ -75,6 +75,7 @@ public class ProductServiceImpl implements IProductsService {
     }
 
     @Override
+    @Transactional
     public Product saveStock(Product product) {
         return repository.save(product);
     }
@@ -88,8 +89,8 @@ public class ProductServiceImpl implements IProductsService {
     @Transactional()
     @Override
     public Integer fixedStockProduct( Long id, Integer quantity){
-        Product productDb= repository.findById(id).get();
-         Integer stock=productDb.getStock()+quantity;
+        Product productDb= repository.findById(id).orElseThrow();
+        Integer stock=productDb.getStock()+quantity;
         productDb.setStock(stock);
         saveStock(productDb);
 
