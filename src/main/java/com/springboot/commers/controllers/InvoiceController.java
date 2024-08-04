@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Invoice;
-import com.springboot.commers.entities.Product;
 import com.springboot.commers.services.IEmployeeService;
 import com.springboot.commers.services.IInvoiceService;
 
