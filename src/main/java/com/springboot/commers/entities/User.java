@@ -3,8 +3,6 @@ package com.springboot.commers.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -30,17 +28,12 @@ public class User {
     private String password;
 
     @Column(name = "serial_user")
-    private String serialUser; 
+    private String serialUser;
 
-    
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "users_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "rol_id")
-    )
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
     @NotEmpty
-    private List<Rol> roles=new ArrayList<>();;
+    private List<Rol> roles = new ArrayList<>();
 
     public User() {
     }
@@ -52,16 +45,14 @@ public class User {
         this.roles = roles;
     }
 
-    
-
     public User(Long id) {
         this.id = id;
     }
 
-
     @Override
     public String toString() {
-        return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles=" + roles + "]";
+        return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles=" + roles
+                + "]";
     }
 
     @Override
@@ -89,5 +80,4 @@ public class User {
         return true;
     }
 
-  
 }
