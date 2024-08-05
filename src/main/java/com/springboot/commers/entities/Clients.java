@@ -19,10 +19,9 @@ import lombok.Setter;
 @Setter
 public class Clients extends User {
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
     private List<Invoice> invoices = new ArrayList<>();
-
-
+    
     
     public Clients() {
     }

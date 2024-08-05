@@ -30,7 +30,9 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    
+    // el remove se hace  manual para pdoer gestionar el stock de los productos
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
     @NotEmpty
     private List<LineInvoice> linesInvoice = new ArrayList<>();;
@@ -38,13 +40,13 @@ public class Invoice {
     
     private Double whole=0.0;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "employee_id")
     @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password","hibernateLazyInitializer", "handler"})
     @NotNull
     private Employees employee;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "client_id")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" , "invoices"})
     @NotNull

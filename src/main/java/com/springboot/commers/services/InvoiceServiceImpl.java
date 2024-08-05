@@ -3,10 +3,8 @@ package com.springboot.commers.services;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import java.util.Objects;
+
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,50 +55,65 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoice.setEmployee(serviceEmployee.getEmployeeDb(employee));
         invoice.setClient(serviceClient.getClientDb(invoice.getClient()));
 
-        List<LineInvoice> lines = invoice.getLinesInvoice().stream().map(line -> serviceLine.save(line))
-                .collect(Collectors.toList());
-        invoice.setLinesInvoice(lines);
         return repository.save(invoice);
     }
-
     @Override
-    @Transactional()
+    @Transactional
     public Optional<Invoice> update(Long id, Invoice invoice, Employees employee) {
-
+    
         Optional<Invoice> optionalInvoice = findById(id);
         if (optionalInvoice.isPresent()) {
             Invoice invoiceDb = optionalInvoice.orElseThrow();
-
+    
+            // Asignar el cliente desde la base de datos
             invoiceDb.setClient(serviceClient.getClientDb(invoice.getClient()));
-            // el employe se tiene que pasar ya de tipo employye db si no hacerlo antes aqui
+    
+            // Asignar el empleado pasado ya como Employee db
             invoiceDb.setEmployee(employee);
-
-            List<LineInvoice> lines = updateLinesInvoice(invoiceDb.getLinesInvoice(), invoice.getLinesInvoice());
-
-            invoiceDb.setLinesInvoice(lines);
+    
+            // Actualizar las líneas de factura utilizando el comportamiento en cascada
+            invoiceDb.getLinesInvoice().clear();
+            invoiceDb.getLinesInvoice().addAll(invoice.getLinesInvoice());
+    
+            // Actualizar el timestamp
             invoiceDb.setDateTime(LocalDateTime.now());
+    
+            // Calcular el total de la factura
             Double whole = invoice.getLinesInvoice().stream()
-                    .mapToDouble(line -> line.getAmount())
+                    .mapToDouble(LineInvoice::getAmount)
                     .sum();
             invoiceDb.setWhole(whole);
-
+    
+            // Guardar y devolver la factura actualizada
             return Optional.of(repository.save(invoiceDb));
         }
-
+    
         return optionalInvoice;
     }
+    
 
     @Override
-    @Transactional()
+    @Transactional
     public Optional<Invoice> delete(Long id) {
         Optional<Invoice> optionalInvoice = repository.findById(id);
+        
         optionalInvoice.ifPresent(invoiceDb -> {
-            invoiceDb.getLinesInvoice().forEach(line -> serviceLine.delete(line.getId()));
+            // Eliminar manualmente las líneas de factura
+            invoiceDb.getLinesInvoice().forEach(line -> {
+                // Realizar lógica adicional antes de eliminar, si es necesario
+                serviceLine.delete(line.getId()); // Eliminar la línea usando el servicio de líneas
+            });
+    
+            // Limpiar la colección de líneas antes de eliminar la factura
+            invoiceDb.getLinesInvoice().clear();
+    
+            // Finalmente, eliminar la factura
             repository.delete(invoiceDb);
         });
-
+    
         return optionalInvoice;
     }
+    
 
     @Override
     @Transactional(readOnly = true)
@@ -108,41 +121,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return repository.findById(invoice.getId()).orElseThrow();
     }
 
-    @Override
-    public List<LineInvoice> updateLinesInvoice(List<LineInvoice> linesDb, List<LineInvoice> newLines) {
-        Set<Long> newLineIds = newLines.stream()
-                .map(LineInvoice::getId)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
 
-        // Eliminar líneas que ya no están en newLines
-        linesDb.stream()
-                .filter(lineDb -> !newLineIds.contains(lineDb.getId()))
-                .forEach(lineDb -> {
-                    serviceLine.delete(lineDb.getId());
-                    System.out.println("Deleted line with ID: " + lineDb.getId());
-                });
-
-        // Actualizar o guardar líneas nuevas
-        List<LineInvoice> finalLineInvoices = newLines.stream()
-                .map(line -> {
-                    if (line.getId() != null) {
-                        // Actualizar línea existente
-                        return serviceLine.update(line.getId(), line)
-                                .orElseGet(() -> {
-                                    // Log de error si la actualización falla
-                                    System.err.println("Failed to update line with ID: " + line.getId());
-                                    return line; // Devolver la línea sin cambios en caso de error
-                                });
-                    } else {
-                        // Guardar nueva línea
-                        LineInvoice savedLine = serviceLine.save(line);
-                        return savedLine;
-                    }
-                })
-                .collect(Collectors.toList());
-
-        return finalLineInvoices;
-    }
 
 }
