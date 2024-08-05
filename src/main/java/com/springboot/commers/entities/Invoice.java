@@ -35,9 +35,9 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
     @NotEmpty
-    private List<LineInvoice> linesInvoice = new ArrayList<>();;
+    private List<LineInvoice> linesInvoice = new ArrayList<>();
 
-    
+    @NotNull
     private Double whole=0.0;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})

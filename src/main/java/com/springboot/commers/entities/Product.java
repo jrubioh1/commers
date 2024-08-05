@@ -17,6 +17,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,8 +41,10 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "create_by_id")
     @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password","hibernateLazyInitializer", "handler"})
+    @NotNull
     private Employees createBy;
 
+    @NotNull
     private LocalDateTime createAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,6 +56,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonIgnore
+    @NotNull
     private List<LineInvoice> linesInvoice=new ArrayList<>();;
 
     public Product() {

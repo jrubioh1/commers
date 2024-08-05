@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -23,11 +24,14 @@ public class User {
     @NotBlank
     private String name;
     @NotBlank
+    @Email
     private String email;
+
     @NotBlank
     private String password;
 
     @Column(name = "serial_user")
+    @NotBlank
     private String serialUser;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
