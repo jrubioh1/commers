@@ -51,10 +51,3 @@ INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE n
 INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_CLIENT') FROM users WHERE email = 'robert.johnson@example.com';
 INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_CLIENT') FROM users WHERE email = 'emily.davis@example.com';
 INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE name = 'ROLE_CLIENT') FROM users WHERE email = 'michael.brown@example.com';
-
--- Insertar productos
-INSERT INTO product (id, name, price) VALUES (1, 'Producto A', 10.50);
-INSERT INTO product (id, name, price) VALUES (2, 'Producto B', 15.75);
-INSERT INTO product (id, name, price) VALUES (3, 'Producto C', 20.00);
-INSERT INTO product (id, name, price) VALUES (4, 'Producto D', 5.00);
-INSERT INTO product (id, name, price) VALUES (5, 'Producto E', 8.25);
