@@ -1,10 +1,13 @@
 package com.springboot.commers.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.commers.entities.Employees;
 
 import com.springboot.commers.services.IEmployeeService;
+
+import jakarta.validation.Valid;
 
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
@@ -54,14 +59,20 @@ public class EmployeesController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create (@RequestBody Employees employee){
+    public ResponseEntity<?> create (@Valid @RequestBody Employees employee, BindingResult result){
+        if (result.hasErrors()){
+            return validation(result);
+        }
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(employee));
     }
 
     @PutMapping("/{id}")
      // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> update(@RequestBody Employees employee, @PathVariable Long id) {
-
+    public ResponseEntity<?> update(@Valid @RequestBody Employees employee, BindingResult result,@PathVariable Long id) {
+        if (result.hasErrors()){
+            return validation(result);
+        }
 
         Optional<Employees> optionalEmployee = service.update(id,employee);
         if (optionalEmployee.isPresent()) {
@@ -86,7 +97,7 @@ public class EmployeesController {
 
 
 
-    @PutMapping("status/{id}")
+    @PutMapping("/toggle-status/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<?> switchStatusEmployee(@PathVariable Long id) {
 
@@ -100,6 +111,17 @@ public class EmployeesController {
        }
        return ResponseEntity.notFound().build();
    }
+
+       private ResponseEntity<?> validation(BindingResult result){
+        Map<String, String> errors= new HashMap<>();
+
+        result.getFieldErrors().forEach(err->{
+            errors.put(err.getField(), "El campo "+ err.getField()+" "+ err.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
+        
+    }
 
 
 

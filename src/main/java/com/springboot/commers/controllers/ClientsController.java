@@ -1,7 +1,8 @@
 package com.springboot.commers.controllers;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Clients;
 import com.springboot.commers.services.IClientService;
+
+import jakarta.validation.Valid;
 
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
@@ -57,21 +60,28 @@ public class ClientsController {
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@RequestBody Clients client) {
+    public ResponseEntity<?> create( @Valid @RequestBody Clients client,BindingResult result) {
+        if (result.hasErrors()){
+            return validation(result);
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Clients client) {
-
-        return create(client);
+    public ResponseEntity<?> register(@Valid @RequestBody Clients client, BindingResult result) {
+        if (result.hasErrors()){
+            return validation(result);
+        }
+        return create(client, result);
     }
 
     @PutMapping("/{id}")
      // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> update(@RequestBody Clients client, @PathVariable Long id) {
-
+    public ResponseEntity<?> update(@Valid @RequestBody Clients client, BindingResult result, @PathVariable Long id) {
+        if (result.hasErrors()){
+            return validation(result);
+        }
 
         Optional<Clients> optionalClients = service.update(id,client);
         if (optionalClients.isPresent()) {
@@ -88,12 +98,24 @@ public class ClientsController {
       // @PreAuthorize("hasRole('ADMIN')")
 
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        
         Optional<Clients> optionalClients = service.delete(id);
         if (optionalClients.isPresent()) {
             return ResponseEntity.ok(optionalClients.orElseThrow());
 
         }
         return ResponseEntity.notFound().build();
+    }
+
+    private ResponseEntity<?> validation(BindingResult result){
+        Map<String, String> errors= new HashMap<>();
+
+        result.getFieldErrors().forEach(err->{
+            errors.put(err.getField(), "El campo "+ err.getField()+" "+ err.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
+        
     }
 
 

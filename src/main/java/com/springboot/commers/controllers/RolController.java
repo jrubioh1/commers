@@ -1,6 +1,8 @@
 package com.springboot.commers.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -44,9 +46,9 @@ public class RolController {
     // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> view(@PathVariable Long id) {
 
-        Optional<Rol> productOptional = service.findById(id);
-        if (productOptional.isPresent()) {
-            return ResponseEntity.ok(productOptional.orElseThrow());
+        Optional<Rol> rolOptional = service.findById(id);
+        if (rolOptional.isPresent()) {
+            return ResponseEntity.ok(rolOptional.orElseThrow());
         }
 
         return ResponseEntity.notFound().build();
@@ -54,7 +56,10 @@ public class RolController {
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create( @RequestBody Rol rol) {
+    public ResponseEntity<?> create( @Valid @RequestBody Rol rol, BindingResult result) {
+        if (result.hasErrors()){
+            return validation(result);
+        }
     
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(rol));
     }
@@ -63,11 +68,13 @@ public class RolController {
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody Rol rol, BindingResult result, @PathVariable Long id) {
    
-       
+        if (result.hasErrors()){
+            return validation(result);
+        }
 
-        Optional<Rol> produOptional = service.update(id, rol);
-        if (produOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(produOptional.orElseThrow());
+        Optional<Rol> rolOptional = service.update(id, rol);
+        if (rolOptional.isPresent()) {
+            return ResponseEntity.ok().body(rolOptional.orElseThrow());
 
         }
 
@@ -79,14 +86,24 @@ public class RolController {
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
 
-        Optional<Rol> productOptional = service.delete(id);
-        if (productOptional.isPresent()) {
-            return ResponseEntity.ok(productOptional.orElseThrow());
+        Optional<Rol> rolOptional = service.delete(id);
+        if (rolOptional.isPresent()) {
+            return ResponseEntity.ok(rolOptional.orElseThrow());
         }
 
         return ResponseEntity.notFound().build();
     }
 
+      private ResponseEntity<?> validation(BindingResult result){
+        Map<String, String> errors= new HashMap<>();
+
+        result.getFieldErrors().forEach(err->{
+            errors.put(err.getField(), "El campo "+ err.getField()+" "+ err.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
+        
+    }
    
 }
 

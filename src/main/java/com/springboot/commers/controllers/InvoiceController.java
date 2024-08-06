@@ -1,6 +1,8 @@
 package com.springboot.commers.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -51,9 +53,10 @@ public class InvoiceController {
 
     @PostMapping
     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create( @RequestBody Invoice invoice) {
-          // validation.validate(product, result);
-      
+    public ResponseEntity<?> create(@Valid @RequestBody Invoice invoice, BindingResult result) {
+        if (result.hasErrors()){
+            return validation(result);
+        }
 
        /*  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -70,6 +73,9 @@ public class InvoiceController {
     @PutMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody Invoice invoice, BindingResult result, @PathVariable Long id) {
+        if (result.hasErrors()){
+            return validation(result);
+        }
         /*
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -107,7 +113,16 @@ public class InvoiceController {
     }
 
 
+      private ResponseEntity<?> validation(BindingResult result){
+        Map<String, String> errors= new HashMap<>();
 
+        result.getFieldErrors().forEach(err->{
+            errors.put(err.getField(), "El campo "+ err.getField()+" "+ err.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
+        
+    }
 
 
 
