@@ -7,5 +7,5 @@ import com.springboot.commers.entities.Product;
 
 public interface IProductRepository extends CrudRepository<Product, Long>{
 
-
+    boolean existsBySerial(String serial);
 }

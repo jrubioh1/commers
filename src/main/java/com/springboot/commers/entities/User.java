@@ -3,6 +3,8 @@ package com.springboot.commers.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.springboot.commers.validations.ExistsByUsername;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +27,7 @@ public class User {
     private String name;
     @NotBlank
     @Email
+    @ExistsByUsername
     private String email;
 
     @NotBlank

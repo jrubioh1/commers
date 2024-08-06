@@ -105,4 +105,10 @@ public class ProductServiceImpl implements IProductsService {
     .map(product -> repository.findById(product.getId()).orElseThrow())
     .collect(Collectors.toList());
     }
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsBySerial(String serial) {
+        return repository.existsBySerial(serial);
+    }
+
 }

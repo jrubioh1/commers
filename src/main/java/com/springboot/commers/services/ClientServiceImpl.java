@@ -91,5 +91,9 @@ public class ClientServiceImpl implements IClientService {
         return repository.findById(client.getId()).orElseThrow();
     }
 
+    @Override
+    public boolean existsByEmail(String username) {
+        return repository.existsByEmail(username);
+    }
 
 }

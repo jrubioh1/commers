@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,11 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
-
 import com.springboot.commers.services.IEmployeeService;
+import com.springboot.commers.validators.UserValidator;
 
 import jakarta.validation.Valid;
-
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 @RestController
@@ -31,27 +31,23 @@ import jakarta.validation.Valid;
 public class EmployeesController {
 
     private final IEmployeeService service;
-    
+    private final UserValidator userValidator;
 
-
-    //@Autowired
-   
-
-    @GetMapping
-    public List<Employees> list(){
-        return service.findAll();
+    @Autowired
+    public EmployeesController(IEmployeeService service, UserValidator userValidator) {
+        this.service = service;
+        this.userValidator = userValidator;
     }
 
-    public EmployeesController(IEmployeeService service) {
-        this.service = service;
-    
+    @GetMapping
+    public List<Employees> list() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> view(@PathVariable Long id) {
-
-        Optional<Employees> optionalEmployees= service.findById(id);
-        if(optionalEmployees.isPresent()){
+        Optional<Employees> optionalEmployees = service.findById(id);
+        if (optionalEmployees.isPresent()) {
             return ResponseEntity.ok(optionalEmployees.orElseThrow());
         }
 
@@ -59,74 +55,56 @@ public class EmployeesController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create (@Valid @RequestBody Employees employee, BindingResult result){
-        if (result.hasErrors()){
+    public ResponseEntity<?> create(@Valid @RequestBody Employees employee, BindingResult result) {
+        userValidator.validate(employee, result);
+        if (result.hasErrors()) {
             return validation(result);
         }
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(employee));
     }
 
     @PutMapping("/{id}")
-     // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> update(@Valid @RequestBody Employees employee, BindingResult result,@PathVariable Long id) {
-        if (result.hasErrors()){
+    public ResponseEntity<?> update(@Valid @RequestBody Employees employee, BindingResult result, @PathVariable Long id) {
+        userValidator.validate(employee, result);
+        if (result.hasErrors()) {
             return validation(result);
         }
 
-        Optional<Employees> optionalEmployee = service.update(id,employee);
+        Optional<Employees> optionalEmployee = service.update(id, employee);
         if (optionalEmployee.isPresent()) {
             return ResponseEntity.ok(optionalEmployee.orElseThrow());
-
         }
         return ResponseEntity.notFound().build();
     }
 
-
     @DeleteMapping("/{id}")
-      // @PreAuthorize("hasRole('ADMIN')")
-
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Employees> optionalEmployee = service.delete(id);
         if (optionalEmployee.isPresent()) {
-
             return ResponseEntity.ok(optionalEmployee.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
-
-
     @PutMapping("/toggle-status/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<?> switchStatusEmployee(@PathVariable Long id) {
+    public ResponseEntity<?> switchStatusEmployee(@PathVariable Long id) {
+        Optional<Employees> optionalEmployee = service.findById(id);
+        if (optionalEmployee.isPresent()) {
+            Employees employee = optionalEmployee.get();
+            employee.setActive(!employee.getActive());
+            return ResponseEntity.ok(service.update(id, employee));
+        }
+        return ResponseEntity.notFound().build();
+    }
 
+    private ResponseEntity<?> validation(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
 
-       Optional<Employees> optionalEmployee = service.findById(id);
-       if (optionalEmployee.isPresent()) {
-           Employees employee=optionalEmployee.get();
-           employee.setActive(!employee.getActive());
-           return ResponseEntity.ok(service.update(id,employee));
-
-       }
-       return ResponseEntity.notFound().build();
-   }
-
-       private ResponseEntity<?> validation(BindingResult result){
-        Map<String, String> errors= new HashMap<>();
-
-        result.getFieldErrors().forEach(err->{
-            errors.put(err.getField(), "El campo "+ err.getField()+" "+ err.getDefaultMessage());
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
         });
 
         return ResponseEntity.badRequest().body(errors);
-        
     }
-
-
-
-    
-    
-
-
 }
