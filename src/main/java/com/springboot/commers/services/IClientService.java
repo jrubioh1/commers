@@ -14,7 +14,7 @@ public interface IClientService {
     Optional<Clients> update(Long id, Clients client);
     Optional<Clients> delete(Long id);
     Clients getClientDb(Clients client);
-    boolean existsByUsername(String username);
+    boolean existsByEmail (String username);
 
 
 }

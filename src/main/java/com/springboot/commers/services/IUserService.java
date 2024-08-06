@@ -50,5 +50,5 @@ public interface IUserService {
      * @param username el nombre de usuario a verificar.
      * @return true si el usuario existe, false si no.
      */
-    boolean existsByUsername(String username);
+    boolean existsByEmail(String username);
 }

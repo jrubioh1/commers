@@ -15,11 +15,11 @@ public class ExistsByUsernameValidation implements ConstraintValidator<ExistsByU
     private IUserService service;
 
     @Override
-    public boolean isValid(String username, ConstraintValidatorContext context) {
+    public boolean isValid(String email, ConstraintValidatorContext context) {
         if (service == null) {
             return true;
         }
-        return !service.existsByUsername(username);
+        return !service.existsByEmail(email);
     }
     
     

@@ -94,8 +94,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public Employees getEmployeeDb(Employees employee){ return repository.findById(employee.getId()).orElseThrow();}
 
     @Override
-    public boolean existsByUsername(String username) {
-        return repository.existsByUsername(username);
+    public boolean existsByEmail(String username) {
+        return repository.existsByEmail(username);
     }
     
    

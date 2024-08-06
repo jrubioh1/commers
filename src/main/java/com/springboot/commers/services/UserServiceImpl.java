@@ -50,7 +50,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+    public boolean existsByEmail(String username) {
+        return userRepository.existsByEmail(username);
     }
 }

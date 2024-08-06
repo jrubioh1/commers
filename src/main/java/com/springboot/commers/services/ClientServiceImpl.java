@@ -92,8 +92,8 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public boolean existsByUsername(String username) {
-        return repository.existsByUsername(username);
+    public boolean existsByEmail(String username) {
+        return repository.existsByEmail(username);
     }
 
 }

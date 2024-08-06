@@ -9,6 +9,6 @@ import com.springboot.commers.entities.Employees;
 public interface IEmployeeRepository extends CrudRepository<Employees, Long> {
 
     Optional<Employees> findByName(String name);
-    boolean existsByUsername(String username);
+    boolean existsByEmail(String username);
 
 }

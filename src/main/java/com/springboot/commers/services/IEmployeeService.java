@@ -14,7 +14,7 @@ public interface IEmployeeService {
     Optional<Employees> delete(Long id); 
     Optional<Employees> findByName(String name);
     Employees getEmployeeDb(Employees employee);
-    boolean existsByUsername(String username);
+    boolean existsByEmail(String username);
 
 
 }

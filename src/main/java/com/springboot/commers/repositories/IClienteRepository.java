@@ -8,7 +8,7 @@ import com.springboot.commers.entities.*;
 
 
 public interface IClienteRepository  extends CrudRepository<Clients, Long>{
-    boolean existsByUsername(String username);
+    boolean existsByEmail(String username);
 
 
 }

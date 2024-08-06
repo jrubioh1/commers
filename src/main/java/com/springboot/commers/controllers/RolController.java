@@ -32,7 +32,7 @@ public class RolController {
     private final IRolService service;
     private final RolValidator rolValidator;
 
-    @Autowired
+    //@Autowired
     public RolController(IRolService service, RolValidator rolValidator) {
         this.service = service;
         this.rolValidator = rolValidator;
