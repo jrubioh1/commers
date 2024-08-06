@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.springboot.commers.validations.IsExistsDb;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,6 +35,8 @@ public class Product {
     private String name;
     private Double price;
     private Integer stock;
+    
+    @IsExistsDb
     private String serial;
 
    

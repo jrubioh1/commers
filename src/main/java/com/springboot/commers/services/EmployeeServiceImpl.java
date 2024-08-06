@@ -93,6 +93,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Transactional(readOnly = true)
     public Employees getEmployeeDb(Employees employee){ return repository.findById(employee.getId()).orElseThrow();}
 
+    @Override
+    public boolean existsByUsername(String username) {
+        return repository.existsByUsername(username);
+    }
     
    
 

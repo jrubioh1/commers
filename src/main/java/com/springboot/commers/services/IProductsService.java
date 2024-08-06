@@ -17,6 +17,7 @@ public interface IProductsService {
     Product getProductDb(Product product);
     Integer fixedStockProduct( Long id, Integer quantity);
     List<Product> listOfProductDb(List<Product> products);
+    boolean existsBySerial(String serial);
 
 
 }

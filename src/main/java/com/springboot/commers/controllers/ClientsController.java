@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,26 +22,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Clients;
 import com.springboot.commers.services.IClientService;
+import com.springboot.commers.validators.UserValidator;
 
 import jakarta.validation.Valid;
-
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 @RestController
 @RequestMapping("/api/clients")
 public class ClientsController {
 
-
     private final IClientService service;
 
-    
-  
+    private final UserValidator userValidator;
 
-    
-    //@Autowired
-    public ClientsController(IClientService service) {
+   // @Autowired
+    public ClientsController(IClientService service, UserValidator userValidator) {
         this.service = service;
-      
+        this.userValidator = userValidator;
     }
 
     @GetMapping
@@ -49,8 +47,8 @@ public class ClientsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?>  view(@PathVariable Long id){
-         Optional<Clients> clientsOptional = service.findById(id);
+    public ResponseEntity<?> view(@PathVariable Long id) {
+        Optional<Clients> clientsOptional = service.findById(id);
         if (clientsOptional.isPresent()) {
             return ResponseEntity.ok(clientsOptional.orElseThrow());
         }
@@ -59,9 +57,9 @@ public class ClientsController {
     }
 
     @PostMapping
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create( @Valid @RequestBody Clients client,BindingResult result) {
-        if (result.hasErrors()){
+    public ResponseEntity<?> create(@Valid @RequestBody Clients client, BindingResult result) {
+        userValidator.validate(client, result);
+        if (result.hasErrors()) {
             return validation(result);
         }
 
@@ -70,53 +68,43 @@ public class ClientsController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody Clients client, BindingResult result) {
-        if (result.hasErrors()){
+        userValidator.validate(client, result);
+        if (result.hasErrors()) {
             return validation(result);
         }
         return create(client, result);
     }
 
     @PutMapping("/{id}")
-     // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody Clients client, BindingResult result, @PathVariable Long id) {
-        if (result.hasErrors()){
+        userValidator.validate(client, result);
+        if (result.hasErrors()) {
             return validation(result);
         }
 
-        Optional<Clients> optionalClients = service.update(id,client);
+        Optional<Clients> optionalClients = service.update(id, client);
         if (optionalClients.isPresent()) {
             return ResponseEntity.ok(optionalClients.orElseThrow());
-
         }
         return ResponseEntity.notFound().build();
     }
 
-    // hay que implementar un controller para que el propio usuario pueda modificar, pero solo sus datos ""
-    // hay que implementar un controller para que el propio usuario pueda eliminarse, pero solo sus datos ""
-
     @DeleteMapping("/{id}")
-      // @PreAuthorize("hasRole('ADMIN')")
-
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        
         Optional<Clients> optionalClients = service.delete(id);
         if (optionalClients.isPresent()) {
             return ResponseEntity.ok(optionalClients.orElseThrow());
-
         }
         return ResponseEntity.notFound().build();
     }
 
-    private ResponseEntity<?> validation(BindingResult result){
-        Map<String, String> errors= new HashMap<>();
+    private ResponseEntity<?> validation(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
 
-        result.getFieldErrors().forEach(err->{
-            errors.put(err.getField(), "El campo "+ err.getField()+" "+ err.getDefaultMessage());
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
         });
 
         return ResponseEntity.badRequest().body(errors);
-        
     }
-
-
 }
