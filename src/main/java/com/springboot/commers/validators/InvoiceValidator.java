@@ -27,17 +27,7 @@ public class InvoiceValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Invoice invoice = (Invoice) target;
 
-        // Validar que la lista de líneas de factura no esté vacía
-        if (invoice.getLinesInvoice() == null || invoice.getLinesInvoice().isEmpty()) {
-            errors.rejectValue("linesInvoice", "field.required", "La factura debe tener al menos una línea de producto.");
-        } else {
-            // Validar cada línea de factura individualmente
-            for (int i = 0; i < invoice.getLinesInvoice().size(); i++) {
-                errors.pushNestedPath("linesInvoice[" + i + "]");
-                ValidationUtils.invokeValidator(lineInvoiceValidator, invoice.getLinesInvoice().get(i), errors);
-                errors.popNestedPath();
-            }
-        }
+      
 
         // Validar que el total de la factura no sea nulo o negativo
         if (invoice.getWhole() == null) {
@@ -46,10 +36,7 @@ public class InvoiceValidator implements Validator {
             errors.rejectValue("whole", "field.invalid", "El total de la factura no puede ser negativo.");
         }
 
-        // Validar que el empleado no sea nulo
-        if (invoice.getEmployee() == null) {
-            errors.rejectValue("employee", "field.required", "La factura debe tener un empleado asignado.");
-        }
+       
 
         // Validar que el cliente no sea nulo
         if (invoice.getClient() == null) {

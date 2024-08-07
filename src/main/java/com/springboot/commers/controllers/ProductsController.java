@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Product;
 import com.springboot.commers.services.IEmployeeService;

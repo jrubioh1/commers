@@ -47,6 +47,7 @@ public class LineInvoiceServiceImpl implements ILineInvoiceService {
     @Transactional
     public LineInvoice save(LineInvoice line) {
         Product productDb = serviceProduct.getProductDb(line.getProduct());
+        line.setAmount(line.getProduct().getPrice()*line.getQuantity());
         serviceProduct.fixedStockProduct(line.getProduct().getId(), -line.getQuantity());
         line.setProduct(productDb);
         return repository.save(line);

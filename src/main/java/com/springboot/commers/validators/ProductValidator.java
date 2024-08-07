@@ -36,13 +36,7 @@ public class ProductValidator implements Validator {
             errors.rejectValue("stock", "field.invalid", "El stock del producto no puede ser negativo.");
         }
 
-        // Validación de campos no nulos
-        if (product.getCreateBy() == null) {
-            errors.rejectValue("createBy", "field.required", "El producto debe tener un creador asignado.");
-        }
+      
 
-        if (product.getCreateAt() == null) {
-            errors.rejectValue("createAt", "field.required", "La fecha de creación es obligatoria.");
-        }
     }
 }

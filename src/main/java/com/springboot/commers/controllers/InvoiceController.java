@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("/api/invoices")
 public class InvoiceController {
 
     private final IInvoiceService service;
@@ -46,7 +46,18 @@ public class InvoiceController {
     @GetMapping
     // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Invoice> list() {
-        return service.findAll();
+        return  service.findAll();
+    }
+
+    @GetMapping("/{id}")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<?> view(@PathVariable Long id) {
+        Optional<Invoice> invoiceOptional = service.findById(id);
+        if (invoiceOptional.isPresent()) {
+            return ResponseEntity.ok(invoiceOptional.orElseThrow());
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping

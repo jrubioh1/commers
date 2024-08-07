@@ -43,10 +43,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "create_by_id")
     @JsonIgnoreProperties({"productsCreated", "productsUpdated", "roles", "invoices", "password","hibernateLazyInitializer", "handler"})
-    @NotNull
     private Employees createBy;
 
-    @NotNull
+   
     private LocalDateTime createAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
