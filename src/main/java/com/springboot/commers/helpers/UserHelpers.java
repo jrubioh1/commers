@@ -67,7 +67,7 @@ public class UserHelpers {
     public List<Rol> listOfRolesDb(List<Rol> roles) {
         return roles.stream()
                 .map(rol -> serviceRol.findByName(rol.getName())
-                        .orElseThrow(() -> new RuntimeException("Role not found: " + rol.getName())))
+                        .orElseThrow(() -> new RuntimeException("Role (findByName) not found: " + rol.getName())))
                 .collect(Collectors.toList());
     }
 

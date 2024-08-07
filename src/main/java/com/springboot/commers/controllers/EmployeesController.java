@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.services.IEmployeeService;
+import com.springboot.commers.validations.OnCreate;
 import com.springboot.commers.validators.UserValidator;
 
 import jakarta.validation.Valid;
@@ -55,7 +57,7 @@ public class EmployeesController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody Employees employee, BindingResult result) {
+    public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody Employees employee, BindingResult result) {
         userValidator.validate(employee, result);
         if (result.hasErrors()) {
             return validation(result);

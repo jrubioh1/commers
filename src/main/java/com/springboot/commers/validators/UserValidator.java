@@ -10,7 +10,7 @@ import com.springboot.commers.entities.User;
 public class UserValidator implements Validator {
 
     // Expresión regular para validar contraseñas complejas
-    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!.]).{8,}$";
 
     @Override
     public boolean supports(Class<?> clazz) {

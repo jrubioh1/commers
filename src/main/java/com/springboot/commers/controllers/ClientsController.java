@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Clients;
 import com.springboot.commers.services.IClientService;
+import com.springboot.commers.validations.OnCreate;
 import com.springboot.commers.validators.UserValidator;
 
 import jakarta.validation.Valid;
@@ -67,7 +69,7 @@ public class ClientsController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody Clients client, BindingResult result) {
+    public ResponseEntity<?> register(@Validated(OnCreate.class)  @RequestBody Clients client, BindingResult result) {
         userValidator.validate(client, result);
         if (result.hasErrors()) {
             return validation(result);
