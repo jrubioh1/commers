@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -32,7 +33,7 @@ public class RolController {
     private final IRolService service;
     private final RolValidator rolValidator;
 
-    //@Autowired
+    // @Autowired
     public RolController(IRolService service, RolValidator rolValidator) {
         this.service = service;
         this.rolValidator = rolValidator;
@@ -63,7 +64,16 @@ public class RolController {
             return validation(result);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(rol));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.save(rol));
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se puede repetir el nombre del rol.");
+
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error: Violación de integridad de datos.");
+
+        }
     }
 
     @PutMapping("/{id}")

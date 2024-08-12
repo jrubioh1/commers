@@ -26,6 +26,8 @@ public class LineInvoice {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
+
     @JoinColumn(name = "invoice_id")
     @NotNull
     private Invoice invoice;

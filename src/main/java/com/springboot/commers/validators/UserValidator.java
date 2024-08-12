@@ -24,8 +24,6 @@ public class UserValidator implements Validator {
         // Validación de campos vacíos
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "field.required", "El nombre es obligatorio.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "field.required", "El email es obligatorio.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "field.required", "La contraseña es obligatoria.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "serialUser", "field.required", "El serial de usuario es obligatorio.");
 
         // Validación de formato de correo electrónico
         if (user.getEmail() != null && !user.getEmail().matches("^(.+)@(.+)$")) {
@@ -39,8 +37,6 @@ public class UserValidator implements Validator {
         }
 
         // Validación de la lista de roles
-        if (user.getRoles() == null || user.getRoles().isEmpty()) {
-            errors.rejectValue("roles", "field.required", "Debe tener al menos un rol.");
-        }
+        
     }
 }

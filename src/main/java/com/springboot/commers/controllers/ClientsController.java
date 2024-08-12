@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +26,7 @@ import com.springboot.commers.services.IClientService;
 import com.springboot.commers.validations.OnCreate;
 import com.springboot.commers.validators.UserValidator;
 
+
 import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
@@ -42,7 +43,7 @@ public class ClientsController {
         this.service = service;
         this.userValidator = userValidator;
     }
-
+ 
     @GetMapping
     public List<Clients> list() {
         return service.findAll();
@@ -58,6 +59,7 @@ public class ClientsController {
         return ResponseEntity.notFound().build();
     }
 
+ 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody Clients client, BindingResult result) {
         userValidator.validate(client, result);
@@ -76,7 +78,7 @@ public class ClientsController {
         }
         return create(client, result);
     }
-
+ 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody Clients client, BindingResult result, @PathVariable Long id) {
         userValidator.validate(client, result);
@@ -90,6 +92,7 @@ public class ClientsController {
         }
         return ResponseEntity.notFound().build();
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {

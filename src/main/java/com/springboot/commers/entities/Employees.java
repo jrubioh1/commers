@@ -3,6 +3,8 @@ package com.springboot.commers.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,12 +22,18 @@ import lombok.Setter;
 public class Employees extends User {
 
     @OneToMany(mappedBy = "employee", cascade =   {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+        @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
+
     private List<Invoice> invoices=new ArrayList<>();
 
     @OneToMany(mappedBy = "createBy",cascade =   {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
+
     private List<Product> productsCreated= new ArrayList<>();
 
     @OneToMany(mappedBy = "modifyBy", cascade =   {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
+
     private List<Product> productsUpdated=new ArrayList<>();
 
  

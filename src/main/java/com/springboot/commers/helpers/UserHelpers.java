@@ -3,6 +3,7 @@ package com.springboot.commers.helpers;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,6 +57,7 @@ public class UserHelpers {
     public Optional<User> deleteUser(Long id) {
         Optional<User> optionalUser = repository.findById(id);
         optionalUser.ifPresent(((userDb) -> {
+            userDb.setRoles(new ArrayList<>() );
             repository.delete(userDb);
 
         }));

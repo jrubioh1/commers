@@ -3,6 +3,8 @@ package com.springboot.commers.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.commers.validations.ExistsByUsername;
 import com.springboot.commers.validations.OnCreate;
 
@@ -31,16 +33,15 @@ public class User {
     @ExistsByUsername(groups = {OnCreate.class})
     private String email;
 
-    @NotBlank
+    @NotBlank(groups = {OnCreate.class})
     private String password;
 
     @Column(name = "serial_user")
-    @NotBlank
     private String serialUser;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
-    @NotEmpty
+    @JsonIgnoreProperties({ "users", "hibernateLazyInitializer", "handler" })
     private List<Rol> roles = new ArrayList<>();
 
     public User() {
