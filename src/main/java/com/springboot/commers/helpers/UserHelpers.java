@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Rol;
 import com.springboot.commers.entities.User;
 import com.springboot.commers.repositories.IUsersRepository;
@@ -54,10 +55,17 @@ public class UserHelpers {
     }
 
     @Transactional()
-    public Optional<User> deleteUser(Long id) {
+    public Optional<User> deleteUser(Long id, Boolean isEmployee) {
         Optional<User> optionalUser = repository.findById(id);
         optionalUser.ifPresent(((userDb) -> {
-            userDb.setRoles(new ArrayList<>() );
+            userDb.getRoles().clear();
+            userDb.getInvoices().clear();
+
+            if(isEmployee){
+                ((Employees) userDb).getProductsCreated().clear();
+                ((Employees) userDb).getProductsUpdated().clear();
+
+            }
             repository.delete(userDb);
 
         }));

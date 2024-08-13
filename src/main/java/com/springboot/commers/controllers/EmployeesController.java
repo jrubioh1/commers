@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -35,7 +34,7 @@ public class EmployeesController {
     private final IEmployeeService service;
     private final UserValidator userValidator;
 
-    @Autowired
+   //@Autowired
     public EmployeesController(IEmployeeService service, UserValidator userValidator) {
         this.service = service;
         this.userValidator = userValidator;

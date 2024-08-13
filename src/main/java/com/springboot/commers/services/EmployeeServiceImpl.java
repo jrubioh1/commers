@@ -79,7 +79,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional()
     public Optional<Employees> delete(Long id) {
-        Employees employeeDeleted = (Employees) userHelpers.deleteUser(id).orElseThrow();
+        
+        Employees employeeDeleted = (Employees) userHelpers.deleteUser(id, true).orElseThrow();
         return Optional.of(employeeDeleted);
 
     }

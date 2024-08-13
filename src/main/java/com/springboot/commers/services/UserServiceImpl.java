@@ -2,7 +2,6 @@ package com.springboot.commers.services;
 
 import com.springboot.commers.entities.User;
 import com.springboot.commers.repositories.IUsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class UserServiceImpl implements IUserService {
     
 
 
-    @Autowired
+    //@Autowired
     public UserServiceImpl(IUsersRepository userRepository) {
         this.userRepository = userRepository;
     }

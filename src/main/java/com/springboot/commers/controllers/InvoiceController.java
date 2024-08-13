@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,7 +35,7 @@ public class InvoiceController {
     private final IEmployeeService serviceEm;
     private final InvoiceValidator invoiceValidator;
 
-    @Autowired
+    //@Autowired
     public InvoiceController(IInvoiceService service, IEmployeeService serviceEm, InvoiceValidator invoiceValidator) {
         this.service = service;
         this.serviceEm = serviceEm;

@@ -3,7 +3,6 @@ package com.springboot.commers.validators;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import com.springboot.commers.entities.Invoice;
 
@@ -11,12 +10,8 @@ import com.springboot.commers.entities.Invoice;
 @Component
 public class InvoiceValidator implements Validator {
 
-    private final LineInvoiceValidator lineInvoiceValidator;
 
-    //@Autowired
-    public InvoiceValidator(LineInvoiceValidator lineInvoiceValidator) {
-        this.lineInvoiceValidator = lineInvoiceValidator;
-    }
+  
 
     @Override
     public boolean supports(Class<?> clazz) {

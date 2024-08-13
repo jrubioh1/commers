@@ -1,7 +1,6 @@
 package com.springboot.commers;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Rol;
 
 import java.util.List;
@@ -20,6 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +35,7 @@ class GenericCommersApplicationTests {
 	@BeforeAll
 	static void setUpOnce(@Autowired MockMvc mvc) throws Exception {
 		ensureRoleExists(mvc, "ROLE_ADMIN");
+		ensureRoleExists(mvc, "ROLE_EMPLOYEE");
 		ensureRoleExists(mvc, "ROLE_CLIENT");
 		ensureRoleExists(mvc, "ROLE_CLIENT_PREMIUM");
 		ensureRoleExists(mvc, "ROLE_TO_DELETE");
@@ -107,7 +109,7 @@ class GenericCommersApplicationTests {
 	}
 
 	@Test
-	void testCreateClient() throws Exception {
+	void testClient() throws Exception {
 		String clientNew = """
 				{
 				    "name": "Michael Brown Client",
@@ -118,10 +120,7 @@ class GenericCommersApplicationTests {
 
 		mvc.perform(post("/api/clients").contentType(APPLICATION_JSON).content(clientNew))
 				.andExpect(status().isCreated());
-	}
-
-	@Test
-	void testDeleteClient() throws Exception {
+		
 		// Crear un cliente
 		String client = """
 				{
@@ -152,18 +151,149 @@ class GenericCommersApplicationTests {
 		// Verificar que el cliente eliminado ya no existe
 		mvc.perform(get("/api/clients/" + clientId))
 				.andExpect(status().isNotFound());
-	}
 
-	@Test
-	void testGetClients() throws Exception {
-		mvc.perform(get("/api/clients"))
+
+				mvc.perform(get("/api/clients"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$").isArray());
-	}
 
-	@Test
-	void testViewClientsNotFound() throws Exception {
 		mvc.perform(get("/api/clients/999")) // ID 999 para asegurarnos que no existe
 				.andExpect(status().isNotFound());
+
 	}
+
+
+    @Test
+    void testCrudOperationsForEmployee() throws Exception {
+        // Create a new Employee
+        String newEmployeeJson = """
+                {
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "password": "securePassword123."
+                }
+                """;
+
+        String createResponse = mvc.perform(post("/api/employees")
+                .contentType(APPLICATION_JSON)
+                .content(newEmployeeJson))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> employeeResponse = objectMapper.readValue(createResponse, new TypeReference<Map<String, Object>>() {
+        });
+        Long employeeId = ((Number) employeeResponse.get("id")).longValue();
+
+        // Read the created Employee
+        mvc.perform(get("/api/employees/" + employeeId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("John Doe"))
+                .andExpect(jsonPath("$.email").value("johndoe@example.com"));
+
+        // Update the Employee's name
+        String updatedEmployeeJson = """
+                {
+                    "name": "Jane Doe",
+                    "email": "johndoe@example.com",
+                    "password": "securePassword123."
+                }
+                """;
+
+        mvc.perform(put("/api/employees/" + employeeId)
+                .contentType(APPLICATION_JSON)
+                .content(updatedEmployeeJson))
+                .andExpect(status().isOk());
+
+        // Verify the update
+        mvc.perform(get("/api/employees/" + employeeId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Jane Doe"))
+                .andExpect(jsonPath("$.email").value("johndoe@example.com"));
+
+        // Delete the Employee
+        mvc.perform(delete("/api/employees/" + employeeId))
+                .andExpect(status().isOk());
+
+        // Verify deletion
+        mvc.perform(get("/api/employees/" + employeeId))
+                .andExpect(status().isNotFound());
+    }
+
+
+	@Test
+    void testCrudOperationsForProduct() throws Exception {
+
+
+
+
+        // Create a new Product
+        String newProductJson = """
+             {
+                    "name": "Laptop",
+                    "price": 1200.00,
+                    "description": "High-end gaming laptop",
+                    "serial":"dsfg785", 
+                    "stock": 10
+                }
+                """;
+
+        String createResponse = mvc.perform(post("/api/product")
+                .contentType(APPLICATION_JSON)
+                .content(newProductJson))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> productResponse = objectMapper.readValue(createResponse, new TypeReference<Map<String, Object>>() {
+        });
+        Long productId = ((Number) productResponse.get("id")).longValue();
+
+        // Read the created Product
+        mvc.perform(get("/api/product/" + productId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Laptop"))
+                .andExpect(jsonPath("$.price").value(1200.00))
+                .andExpect(jsonPath("$.description").value("High-end gaming laptop"))
+				.andExpect(jsonPath("$.serial").value("dsfg78"))
+				.andExpect(jsonPath("$.stock").value(10));
+
+        // Update the Product's name and price
+        String updatedProductJson = """
+             {
+                    "name": "Gaming Laptop",
+                    "price": 1300.00,
+                    "description": "High-end gaming laptop",
+                    "serial":"dsfg78", 
+                    "stock": 10
+                }
+                """;
+
+        mvc.perform(put("/api/product/" + productId)
+                .contentType(APPLICATION_JSON)
+                .content(updatedProductJson))
+                .andExpect(status().isOk());
+
+        // Verify the update
+        mvc.perform(get("/api/product/" + productId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Gaming Laptop"))
+                .andExpect(jsonPath("$.price").value(1300.00))
+                .andExpect(jsonPath("$.description").value("High-end gaming laptop"))
+				.andExpect(jsonPath("$.serial").value("dsfg78"))
+				.andExpect(jsonPath("$.stock").value(10));
+
+
+        // Delete the Product
+        mvc.perform(delete("/api/product/" + productId))
+                .andExpect(status().isOk());
+
+        // Verify deletion
+        mvc.perform(get("/api/product/" + productId))
+                .andExpect(status().isNotFound());
+    }
 }

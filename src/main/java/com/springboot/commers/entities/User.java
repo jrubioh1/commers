@@ -3,7 +3,6 @@ package com.springboot.commers.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.commers.validations.ExistsByUsername;
 import com.springboot.commers.validations.OnCreate;
@@ -11,7 +10,7 @@ import com.springboot.commers.validations.OnCreate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,15 +43,27 @@ public class User {
     @JsonIgnoreProperties({ "users", "hibernateLazyInitializer", "handler" })
     private List<Rol> roles = new ArrayList<>();
 
+        
+    @OneToMany(mappedBy = "client", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({ "employee", "client", "linesInvoice", "hibernateLazyInitializer", "handler" })
+    private List<Invoice> invoices = new ArrayList<>();
+
     public User() {
     }
 
-    public User(String name, String email, String password, List<Rol> roles) {
+
+
+    public User(String name,String email,String password, String serialUser, List<Rol> roles,
+            List<Invoice> invoices) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.serialUser = serialUser;
         this.roles = roles;
+        this.invoices = invoices;
     }
+
+
 
     public User(Long id) {
         this.id = id;
@@ -60,9 +71,11 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles=" + roles
-                + "]";
+        return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", serialUser="
+                + serialUser + ", roles=" + roles + ", invoices=" + invoices + "]";
     }
+
+
 
     @Override
     public int hashCode() {

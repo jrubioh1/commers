@@ -7,17 +7,16 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Product;
 import com.springboot.commers.services.IEmployeeService;
@@ -38,7 +37,7 @@ public class ProductsController {
     private final IEmployeeService serviceEmployee;
     private final ProductValidator productValidator;
 
-    @Autowired
+    //@Autowired
     public ProductsController(IProductsService service, IEmployeeService serviceEmployee, ProductValidator productValidator) {
         this.service = service;
         this.serviceEmployee = serviceEmployee;

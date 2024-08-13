@@ -80,7 +80,7 @@ public class ClientServiceImpl implements IClientService {
     @Override
     @Transactional()
     public Optional<Clients> delete(Long id) {
-        Clients clientDeleted = (Clients) userHelpers.deleteUser(id).orElseThrow();
+        Clients clientDeleted = (Clients) userHelpers.deleteUser(id, false).orElseThrow();
         return Optional.of(clientDeleted);
 
     }
