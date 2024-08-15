@@ -32,6 +32,7 @@ public class Rol {
     @JsonIgnore
     @ManyToMany(mappedBy = "roles",  fetch = FetchType.LAZY)
     private List<User> users=new ArrayList<>();
+    
 
     public Rol() {
     }

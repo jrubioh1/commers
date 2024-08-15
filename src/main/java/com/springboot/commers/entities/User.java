@@ -48,6 +48,8 @@ public class User {
     @JsonIgnoreProperties({ "employee", "client", "linesInvoice", "hibernateLazyInitializer", "handler" })
     private List<Invoice> invoices = new ArrayList<>();
 
+    private Boolean isEnabled=true;
+
     public User() {
     }
 

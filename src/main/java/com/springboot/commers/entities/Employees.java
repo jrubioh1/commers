@@ -34,7 +34,7 @@ public class Employees extends User {
     private List<Product> productsUpdated=new ArrayList<>();
 
  
-    private Boolean active=true;
+    
 
     public Employees() {
     }

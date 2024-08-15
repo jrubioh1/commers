@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.springboot.commers.entities.Clients;
@@ -25,7 +28,8 @@ public class ClientServiceImpl implements IClientService {
 
 
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //@Autowired
     
@@ -67,6 +71,7 @@ public class ClientServiceImpl implements IClientService {
         List<Rol> rolesDb=userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
         client.setRoles( rolesDb);
         client.setSerialUser(UserHelpers.generateUserSerial(client.getName(), client.getEmail(), LocalDate.now().toString()));
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         return repository.save(client);
     }
 

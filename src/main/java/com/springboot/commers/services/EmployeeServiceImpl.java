@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     private final UserHelpers userHelpers;
 
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     // @Autowired
 
     @Override
@@ -65,6 +70,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         employee.setRoles(rolesDb);
         employee.setSerialUser(UserHelpers.generateUserSerial(employee.getName(), employee.getEmail(), LocalDate.now().toString()));
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         return repository.save(employee);
 
     }
