@@ -49,7 +49,13 @@ public class User {
     @JsonIgnore
     private List<Invoice> invoices = new ArrayList<>();
 
-    private Boolean isEnabled=true;
+    private Boolean enabled;
+
+    @PrePersist
+    public void prePersist() {
+        enabled = true;
+    }
+
 
     public User() {
     }
@@ -78,7 +84,13 @@ public class User {
                 + serialUser + ", roles=" + roles + ", invoices=" + invoices + "]";
     }
 
+    public boolean isEnabled(){
+        return this.enabled;
+    }
 
+    public void setEnabled(boolean enabled){
+        this.enabled=enabled;
+    }
 
     @Override
     public int hashCode() {

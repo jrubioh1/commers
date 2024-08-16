@@ -26,7 +26,7 @@ import com.springboot.commers.security.filter.JwtAuthenticationFilter;
 import com.springboot.commers.security.filter.JwtValidationFilter;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled=true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
@@ -38,26 +38,27 @@ public class SpringSecurityConfig {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();}
+        return new BCryptPasswordEncoder();
+    }
 
-    
 
-@Bean
-SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    return http.authorizeHttpRequests((authz) -> authz
-            .requestMatchers(HttpMethod.GET, "/api/clients").permitAll()
-            .requestMatchers(HttpMethod.GET,"/api/users/email/{email}").permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/clients/register").permitAll()
-            .anyRequest().authenticated())
-            .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-            .addFilter(new JwtValidationFilter(authenticationManager()))
-            .csrf(config -> config.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .build();
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-}
+        return http.authorizeHttpRequests((authz) -> authz
+                .requestMatchers(HttpMethod.GET, "/api/clients").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users/email/{email}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/clients/register").permitAll()
+                .anyRequest().authenticated())
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtValidationFilter(authenticationManager()))
+                .csrf(config -> config.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .build();
+
+    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

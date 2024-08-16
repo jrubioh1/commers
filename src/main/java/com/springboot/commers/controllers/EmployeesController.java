@@ -93,7 +93,7 @@ public class EmployeesController {
         Optional<Employees> optionalEmployee = service.findById(id);
         if (optionalEmployee.isPresent()) {
             Employees employee = optionalEmployee.get();
-            employee.setIsEnabled(!employee.getIsEnabled());
+            employee.setEnabled(!employee.isEnabled());
             return ResponseEntity.ok(service.update(id, employee));
         }
         return ResponseEntity.notFound().build();

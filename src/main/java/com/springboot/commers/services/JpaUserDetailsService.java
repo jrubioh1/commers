@@ -10,11 +10,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.User;
 import com.springboot.commers.repositories.IUsersRepository;
 
+@Service
 public class JpaUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -39,7 +41,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), 
         user.getPassword(), 
-        user.getIsEnabled(),
+        user.isEnabled(),
         true,
         true,
         true,
