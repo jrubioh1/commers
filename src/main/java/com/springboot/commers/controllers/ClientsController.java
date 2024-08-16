@@ -77,6 +77,8 @@ public class ClientsController {
         }
         return create(client, result);
     }
+
+   
  
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody Clients client, BindingResult result, @PathVariable Long id) {
@@ -91,6 +93,7 @@ public class ClientsController {
         }
         return ResponseEntity.notFound().build();
     }
+
 
 
     @DeleteMapping("/{id}")

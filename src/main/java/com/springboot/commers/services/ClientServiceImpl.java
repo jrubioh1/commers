@@ -101,4 +101,6 @@ public class ClientServiceImpl implements IClientService {
         return repository.existsByEmail(username);
     }
 
+    
+
 }

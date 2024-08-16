@@ -77,5 +77,4 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
             response.setContentType(CONTENT_TYPE);
         }
     }
-
 }

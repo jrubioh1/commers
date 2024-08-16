@@ -51,4 +51,7 @@ public interface IUserService {
      * @return true si el usuario existe, false si no.
      */
     boolean existsByEmail(String username);
+
+
+    Optional<User> findByEmail(String email);
 }

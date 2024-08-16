@@ -32,7 +32,7 @@ class GenericCommersApplicationTests {
 	@Autowired
 	MockMvc mvc;
 
-	@BeforeAll
+	//@BeforeAll
 	static void setUpOnce(@Autowired MockMvc mvc) throws Exception {
 		ensureRoleExists(mvc, "ROLE_ADMIN");
 		ensureRoleExists(mvc, "ROLE_EMPLOYEE");

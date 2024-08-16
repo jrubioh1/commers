@@ -3,6 +3,7 @@ package com.springboot.commers.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.commers.validations.ExistsByUsername;
 import com.springboot.commers.validations.OnCreate;
@@ -40,12 +41,12 @@ public class User {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
-    @JsonIgnoreProperties({ "users", "hibernateLazyInitializer", "handler" })
+    @JsonIgnore
     private List<Rol> roles = new ArrayList<>();
 
         
     @OneToMany(mappedBy = "client", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({ "employee", "client", "linesInvoice", "hibernateLazyInitializer", "handler" })
+    @JsonIgnore
     private List<Invoice> invoices = new ArrayList<>();
 
     private Boolean isEnabled=true;
