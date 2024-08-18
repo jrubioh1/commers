@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.springboot.commers.entities.Employees;
+import com.springboot.commers.entities.User;
 
 public interface IEmployeeService {
 
@@ -15,6 +16,6 @@ public interface IEmployeeService {
     Optional<Employees> findByName(String name);
     Employees getEmployeeDb(Employees employee);
     boolean existsByEmail(String username);
-
+ Optional<Employees> findByEmail(String email);
 
 }

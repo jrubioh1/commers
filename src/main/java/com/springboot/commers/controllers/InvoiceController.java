@@ -7,6 +7,9 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,8 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Invoice;
+import com.springboot.commers.entities.User;
 import com.springboot.commers.services.IEmployeeService;
 import com.springboot.commers.services.IInvoiceService;
+import com.springboot.commers.services.IUserService;
 import com.springboot.commers.validators.InvoiceValidator;
 
 import jakarta.validation.Valid;
@@ -33,23 +38,25 @@ public class InvoiceController {
 
     private final IInvoiceService service;
     private final IEmployeeService serviceEm;
+    private final IUserService serviceUser; 
     private final InvoiceValidator invoiceValidator;
 
-    //@Autowired
-    public InvoiceController(IInvoiceService service, IEmployeeService serviceEm, InvoiceValidator invoiceValidator) {
+    // @Autowired
+    public InvoiceController(IInvoiceService service, IEmployeeService serviceEm, InvoiceValidator invoiceValidator, IUserService serviceUser) {
         this.service = service;
         this.serviceEm = serviceEm;
         this.invoiceValidator = invoiceValidator;
+        this.serviceUser= serviceUser;
     }
 
     @GetMapping
     // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Invoice> list() {
-        return  service.findAll();
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
-    // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> view(@PathVariable Long id) {
         Optional<Invoice> invoiceOptional = service.findById(id);
         if (invoiceOptional.isPresent()) {
@@ -60,31 +67,30 @@ public class InvoiceController {
     }
 
     @PostMapping
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> create(@Valid @RequestBody Invoice invoice, BindingResult result) {
         invoiceValidator.validate(invoice, result);
         if (result.hasErrors()) {
             return validation(result);
         }
-
-        // Aquí se debe reemplazar la lógica para obtener el empleado actual
-        Employees employee = serviceEm.findById(1L).orElseThrow();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(invoice, employee));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
+        Employees employeeDB= serviceEm.findById(userDb.getId()).orElseThrow();
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(invoice, employeeDB));
     }
 
     @PutMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> update(@Valid @RequestBody Invoice invoice, BindingResult result, @PathVariable Long id) {
         invoiceValidator.validate(invoice, result);
         if (result.hasErrors()) {
             return validation(result);
         }
-
-        // Aquí se debe reemplazar la lógica para obtener el empleado actual
-        Employees employee = serviceEm.findById(2L).orElseThrow();
-
-        Optional<Invoice> invoiceOptional = service.update(id, invoice, employee);
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
+        Employees employeeDB= serviceEm.findById(userDb.getId()).orElseThrow();
+        Optional<Invoice> invoiceOptional = service.update(id, invoice, employeeDB);
         if (invoiceOptional.isPresent()) {
             return ResponseEntity.ok(invoiceOptional.orElseThrow());
         }
@@ -93,7 +99,7 @@ public class InvoiceController {
     }
 
     @DeleteMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Invoice> invoiceOptional = service.delete(id);
         if (invoiceOptional.isPresent()) {

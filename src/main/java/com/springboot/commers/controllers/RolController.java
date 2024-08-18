@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,13 +40,12 @@ public class RolController {
     }
 
     @GetMapping
-    // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public List<Rol> list() {
+    @PreAuthorize("hasAnyRole('ADMIN')")    public List<Rol> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+      @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> view(@PathVariable Long id) {
         Optional<Rol> rolOptional = service.findById(id);
         if (rolOptional.isPresent()) {
@@ -56,7 +56,7 @@ public class RolController {
     }
 
     @PostMapping
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody Rol rol, BindingResult result) {
         rolValidator.validate(rol, result);
         if (result.hasErrors()) {
@@ -76,7 +76,7 @@ public class RolController {
     }
 
     @PutMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody Rol rol, BindingResult result, @PathVariable Long id) {
         rolValidator.validate(rol, result);
         if (result.hasErrors()) {
@@ -92,7 +92,7 @@ public class RolController {
     }
 
     @DeleteMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Rol> rolOptional = service.delete(id);
         if (rolOptional.isPresent()) {

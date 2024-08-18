@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.springboot.commers.entities.Clients;
+import com.springboot.commers.entities.User;
 
 
 public interface IClientService {
@@ -15,7 +16,7 @@ public interface IClientService {
     Optional<Clients> delete(Long id);
     Clients getClientDb(Clients client);
     boolean existsByEmail (String username);
-
+     Optional<Clients> findByEmail(String email);
 
 
 }

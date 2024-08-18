@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Rol;
+import com.springboot.commers.entities.User;
 import com.springboot.commers.helpers.UserHelpers;
 import com.springboot.commers.repositories.IEmployeeRepository;
 
@@ -22,7 +23,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
     private final IEmployeeRepository repository;
 
     private final UserHelpers userHelpers;
-
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -69,7 +69,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
         List<Rol> rolesDb = userHelpers.listOfRolesDb(roles).stream().distinct().collect(Collectors.toList());
 
         employee.setRoles(rolesDb);
-        employee.setSerialUser(UserHelpers.generateUserSerial(employee.getName(), employee.getEmail(), LocalDate.now().toString()));
+        employee.setSerialUser(
+                UserHelpers.generateUserSerial(employee.getName(), employee.getEmail(), LocalDate.now().toString()));
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         return repository.save(employee);
 
@@ -85,7 +86,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional()
     public Optional<Employees> delete(Long id) {
-        
+
         Employees employeeDeleted = (Employees) userHelpers.deleteUser(id, true).orElseThrow();
         return Optional.of(employeeDeleted);
 
@@ -98,13 +99,18 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Transactional(readOnly = true)
-    public Employees getEmployeeDb(Employees employee){ return repository.findById(employee.getId()).orElseThrow();}
+    public Employees getEmployeeDb(Employees employee) {
+        return repository.findById(employee.getId()).orElseThrow();
+    }
 
     @Override
     public boolean existsByEmail(String username) {
         return repository.existsByEmail(username);
     }
-    
-   
+
+    @Override
+    public Optional<Employees> findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
 
 }

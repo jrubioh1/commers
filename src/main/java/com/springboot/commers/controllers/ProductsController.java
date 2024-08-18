@@ -7,10 +7,12 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Product;
+import com.springboot.commers.entities.User;
 import com.springboot.commers.services.IEmployeeService;
 import com.springboot.commers.services.IProductsService;
+import com.springboot.commers.services.IUserService;
 import com.springboot.commers.validators.ProductValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,21 +40,27 @@ public class ProductsController {
     private final IProductsService service;
     private final IEmployeeService serviceEmployee;
     private final ProductValidator productValidator;
+    private final IUserService serviceUser; 
 
-    //@Autowired
-    public ProductsController(IProductsService service, IEmployeeService serviceEmployee, ProductValidator productValidator) {
-        this.service = service;
-        this.serviceEmployee = serviceEmployee;
-        this.productValidator = productValidator;
-    }
+    // @Autowired
+  
 
     @GetMapping
-    // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public List<Product> list() {
         return service.findAll();
     }
 
+    public ProductsController(IProductsService service, IEmployeeService serviceEmployee,
+            ProductValidator productValidator, IUserService serviceUser) {
+        this.service = service;
+        this.serviceEmployee = serviceEmployee;
+        this.productValidator = productValidator;
+        this.serviceUser = serviceUser;
+    }
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> view(@PathVariable Long id) {
         Optional<Product> productOptional = service.findById(id);
@@ -61,31 +71,31 @@ public class ProductsController {
     }
 
     @PostMapping
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> create(@Valid @RequestBody Product product, BindingResult result) {
         productValidator.validate(product, result);
         if (result.hasErrors()) {
             return validation(result);
         }
 
-        // Aquí se debe reemplazar la lógica para obtener el empleado actual
-        Employees employee = serviceEmployee.findById(1L).orElseThrow();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(product, employee));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
+        Employees employeeDB= serviceEmployee.findById(userDb.getId()).orElseThrow();
+      
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(product, employeeDB));
     }
 
     @PutMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> update(@Valid @RequestBody Product product, BindingResult result, @PathVariable Long id) {
         productValidator.validate(product, result);
         if (result.hasErrors()) {
             return validation(result);
         }
-
-        // Aquí se debe reemplazar la lógica para obtener el empleado actual
-        Employees employee = serviceEmployee.findById(2L).orElseThrow();
-
-        Optional<Product> produOptional = service.update(id, product, employee);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
+        Employees employeeDB= serviceEmployee.findById(userDb.getId()).orElseThrow();
+        Optional<Product> produOptional = service.update(id, product, employeeDB);
         if (produOptional.isPresent()) {
             return ResponseEntity.ok(produOptional.orElseThrow());
         }
@@ -94,7 +104,7 @@ public class ProductsController {
     }
 
     @DeleteMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Product> productOptional = service.delete(id);
         if (productOptional.isPresent()) {

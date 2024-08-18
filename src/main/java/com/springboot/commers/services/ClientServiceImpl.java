@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.springboot.commers.entities.Clients;
 import com.springboot.commers.entities.Rol;
+import com.springboot.commers.entities.User;
 import com.springboot.commers.repositories.IClienteRepository;
 
 import com.springboot.commers.helpers.UserHelpers;
@@ -99,6 +100,10 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public boolean existsByEmail(String username) {
         return repository.existsByEmail(username);
+    }
+        @Override
+    public Optional<Clients> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     

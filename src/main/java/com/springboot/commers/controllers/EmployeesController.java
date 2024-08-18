@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,6 +37,9 @@ public class EmployeesController {
     private final IEmployeeService service;
     private final UserValidator userValidator;
 
+     @Autowired
+    private PasswordEncoder passwordEncoder;
+
    //@Autowired
     public EmployeesController(IEmployeeService service, UserValidator userValidator) {
         this.service = service;
@@ -41,11 +47,13 @@ public class EmployeesController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public List<Employees> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> view(@PathVariable Long id) {
         Optional<Employees> optionalEmployees = service.findById(id);
         if (optionalEmployees.isPresent()) {
@@ -56,16 +64,19 @@ public class EmployeesController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody Employees employee, BindingResult result) {
         userValidator.validate(employee, result);
         if (result.hasErrors()) {
             return validation(result);
         }
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(employee));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> update(@Valid @RequestBody Employees employee, BindingResult result, @PathVariable Long id) {
         userValidator.validate(employee, result);
         if (result.hasErrors()) {
@@ -80,6 +91,7 @@ public class EmployeesController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Employees> optionalEmployee = service.delete(id);
         if (optionalEmployee.isPresent()) {
@@ -89,6 +101,7 @@ public class EmployeesController {
     }
 
     @PutMapping("/toggle-status/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> switchStatusEmployee(@PathVariable Long id) {
         Optional<Employees> optionalEmployee = service.findById(id);
         if (optionalEmployee.isPresent()) {

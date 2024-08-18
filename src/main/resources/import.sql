@@ -4,11 +4,11 @@ INSERT INTO rol (name) VALUES ('ROLE_EMPLOYEE') ON CONFLICT DO NOTHING;
 INSERT INTO rol (name) VALUES ('ROLE_CLIENT') ON CONFLICT DO NOTHING;
 
 -- Insertar usuarios (empleados) con rol de administrador
-INSERT INTO users (name, email, password, serial_user) VALUES ('Employee1', 'employee1@example.com', 'password1','1');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Employee2', 'employee2@example.com', 'password2','2');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Employee3', 'employee3@example.com', 'password3','3');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Employee4', 'employee4@example.com', 'password4','4');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Employee5', 'employee5@example.com', 'password5','5');
+INSERT INTO users (name, email, password, serial_user, enabled) VALUES ('Employee1', 'employee1@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','1', true);
+INSERT INTO users (name, email, password, serial_user, enabled) VALUES ('Employee2', 'employee2@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','2', true);
+INSERT INTO users (name, email, password, serial_user, enabled) VALUES ('Employee3', 'employee3@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','3', true);
+INSERT INTO users (name, email, password, serial_user, enabled) VALUES ('Employee4', 'employee4@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','4', true);
+INSERT INTO users (name, email, password, serial_user, enabled) VALUES ('Employee5', 'employee5@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','5', true);
 
 
 -- Asociar los usuarios con el rol de administrador
@@ -25,18 +25,18 @@ INSERT INTO users_roles (user_id, rol_id) SELECT id, (SELECT id FROM rol WHERE n
 
 
 -- Insertar empleados
-INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee1@example.com';
-INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee2@example.com';
-INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee3@example.com';
-INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee4@example.com';
-INSERT INTO employees (id, active) SELECT id, true FROM users WHERE email = 'employee5@example.com';
+INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee1@example.com';
+INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee2@example.com';
+INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee3@example.com';
+INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee4@example.com';
+INSERT INTO employees (id) SELECT id FROM users WHERE email = 'employee5@example.com';
 
 -- Inserta usuarios (clientes)
-INSERT INTO users (name, email, password, serial_user) VALUES ('John Doe', 'john.doe@example.com', 'password123','6');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Jane Smith', 'jane.smith@example.com', 'password123','7');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Robert Johnson', 'robert.johnson@example.com', 'password123','8');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Emily Davis', 'emily.davis@example.com', 'password123','9');
-INSERT INTO users (name, email, password, serial_user) VALUES ('Michael Brown', 'michael.brown@example.com', 'password123','10');
+INSERT INTO users (name, email, password, serial_user) VALUES ('John Doe', 'john.doe@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','6');
+INSERT INTO users (name, email, password, serial_user) VALUES ('Jane Smith', 'jane.smith@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','7');
+INSERT INTO users (name, email, password, serial_user) VALUES ('Robert Johnson', 'robert.johnson@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','8');
+INSERT INTO users (name, email, password, serial_user) VALUES ('Emily Davis', 'emily.davis@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','9');
+INSERT INTO users (name, email, password, serial_user) VALUES ('Michael Brown', 'michael.brown@example.com', '$2a$10$LqDl4BcvGSc7RgLOtfluEuu4VE/MQZj0aYtAL5JbboPi5bk2ZMe0i','10');
 
 -- Insertar clientes
 INSERT INTO clients (id) SELECT id FROM users WHERE email = 'john.doe@example.com';

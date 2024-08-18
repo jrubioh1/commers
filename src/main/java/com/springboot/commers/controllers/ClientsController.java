@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,6 +39,10 @@ public class ClientsController {
 
     private final UserValidator userValidator;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
    // @Autowired
     public ClientsController(IClientService service, UserValidator userValidator) {
         this.service = service;
@@ -44,11 +50,13 @@ public class ClientsController {
     }
  
     @GetMapping
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public List<Clients> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> view(@PathVariable Long id) {
         Optional<Clients> clientsOptional = service.findById(id);
         if (clientsOptional.isPresent()) {
@@ -60,11 +68,14 @@ public class ClientsController {
 
  
     @PostMapping
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> create(@Valid @RequestBody Clients client, BindingResult result) {
         userValidator.validate(client, result);
         if (result.hasErrors()) {
             return validation(result);
         }
+
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
@@ -81,6 +92,8 @@ public class ClientsController {
    
  
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
+
     public ResponseEntity<?> update(@Valid @RequestBody Clients client, BindingResult result, @PathVariable Long id) {
         userValidator.validate(client, result);
         if (result.hasErrors()) {
@@ -97,6 +110,7 @@ public class ClientsController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Clients> optionalClients = service.delete(id);
         if (optionalClients.isPresent()) {
