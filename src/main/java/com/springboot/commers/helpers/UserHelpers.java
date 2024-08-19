@@ -42,11 +42,14 @@ public class UserHelpers {
         Optional<User> optionalUser = repository.findById(id);
         if (optionalUser.isPresent()) {
             User userDB = optionalUser.orElseThrow();
+
             userDB.setName(user.getName());
+            userDB.setLastname(user.getLastname());
+            userDB.setTelephoneNumber(user.getTelephoneNumber());
             userDB.setEmail(user.getEmail());
             userDB.setPassword(user.getPassword());
             userDB.setRoles(listOfRolesDb(user.getRoles()));
-            return Optional.of(repository.save(userDB));
+            return Optional.of(userDB);
 
         }
 

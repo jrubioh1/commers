@@ -79,7 +79,8 @@ public class ClientServiceImpl implements IClientService {
     @Transactional()
     public Optional<Clients> update(Long id, Clients client) {
       Clients clientUpdated = (Clients) userHelpers.updateUser(id, client).orElseThrow();
-      return Optional.of(clientUpdated);
+      clientUpdated.setAddress(client.getAddress());
+      return Optional.of(repository.save(clientUpdated));
     }
 
     @Override

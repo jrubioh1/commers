@@ -79,7 +79,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Transactional()
     public Optional<Employees> update(Long id, Employees employee) {
         Employees employeeUpdated = (Employees) userHelpers.updateUser(id, employee).orElseThrow();
-        return Optional.of(employeeUpdated);
+        return Optional.of(repository.save(employeeUpdated));
     }
 
     @Override

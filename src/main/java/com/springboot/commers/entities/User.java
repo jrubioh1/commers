@@ -29,7 +29,7 @@ public class User {
     private String name;
 
     @NotBlank
-    private String lastName; 
+    private String lastname; 
 
     @NotBlank
     private String telephoneNumber; 
