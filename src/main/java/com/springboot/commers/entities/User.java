@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.commers.validations.ExistsByUsername;
 import com.springboot.commers.validations.OnCreate;
 
@@ -28,6 +27,13 @@ public class User {
 
     @NotBlank
     private String name;
+
+    @NotBlank
+    private String lastName; 
+
+    @NotBlank
+    private String telephoneNumber; 
+
     @NotBlank
     @Email
     @ExistsByUsername(groups = {OnCreate.class})

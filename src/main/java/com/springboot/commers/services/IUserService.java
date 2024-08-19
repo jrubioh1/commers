@@ -1,5 +1,7 @@
 package com.springboot.commers.services;
 
+import com.springboot.commers.entities.Clients;
+import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.User;
 import java.util.List;
 import java.util.Optional;
@@ -54,4 +56,6 @@ public interface IUserService {
 
 
     Optional<User> findByEmail(String email);
+    Optional<Clients> findClientByEmail(String email); 
+    Optional<Employees> findEmployeeByEmail(String email);
 }

@@ -1,5 +1,7 @@
 package com.springboot.commers.services;
 
+import com.springboot.commers.entities.Clients;
+import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.User;
 import com.springboot.commers.repositories.IUsersRepository;
 import org.springframework.stereotype.Service;
@@ -63,5 +65,23 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+
+
+    @Override
+    public Optional<Clients> findClientByEmail(String email) {
+
+        return userRepository.findClientByEmail(email);
+    
+    }
+
+
+
+    @Override
+    public Optional<Employees> findEmployeeByEmail(String email) {
+
+        return userRepository.findEmployeeByEmail(email);
+
     }
 }

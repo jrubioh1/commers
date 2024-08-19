@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Product;
-import com.springboot.commers.entities.User;
-import com.springboot.commers.services.IEmployeeService;
 import com.springboot.commers.services.IProductsService;
 import com.springboot.commers.services.IUserService;
 import com.springboot.commers.validators.ProductValidator;
@@ -38,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProductsController {
 
     private final IProductsService service;
-    private final IEmployeeService serviceEmployee;
     private final ProductValidator productValidator;
     private final IUserService serviceUser; 
 
@@ -51,10 +48,9 @@ public class ProductsController {
         return service.findAll();
     }
 
-    public ProductsController(IProductsService service, IEmployeeService serviceEmployee,
+    public ProductsController(IProductsService service,
             ProductValidator productValidator, IUserService serviceUser) {
         this.service = service;
-        this.serviceEmployee = serviceEmployee;
         this.productValidator = productValidator;
         this.serviceUser = serviceUser;
     }
@@ -79,8 +75,7 @@ public class ProductsController {
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
-        Employees employeeDB= serviceEmployee.findById(userDb.getId()).orElseThrow();
+        Employees employeeDB= serviceUser.findEmployeeByEmail(authentication.getName()).orElseThrow();
       
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(product, employeeDB));
     }
@@ -93,8 +88,10 @@ public class ProductsController {
             return validation(result);
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
-        Employees employeeDB= serviceEmployee.findById(userDb.getId()).orElseThrow();
+
+        
+       
+        Employees employeeDB= serviceUser.findEmployeeByEmail(authentication.getName()).orElseThrow();
         Optional<Product> produOptional = service.update(id, product, employeeDB);
         if (produOptional.isPresent()) {
             return ResponseEntity.ok(produOptional.orElseThrow());

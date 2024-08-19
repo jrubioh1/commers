@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Invoice;
-import com.springboot.commers.entities.User;
-import com.springboot.commers.services.IEmployeeService;
 import com.springboot.commers.services.IInvoiceService;
 import com.springboot.commers.services.IUserService;
 import com.springboot.commers.validators.InvoiceValidator;
@@ -37,14 +35,12 @@ import jakarta.validation.Valid;
 public class InvoiceController {
 
     private final IInvoiceService service;
-    private final IEmployeeService serviceEm;
     private final IUserService serviceUser; 
     private final InvoiceValidator invoiceValidator;
 
     // @Autowired
-    public InvoiceController(IInvoiceService service, IEmployeeService serviceEm, InvoiceValidator invoiceValidator, IUserService serviceUser) {
+    public InvoiceController(IInvoiceService service, InvoiceValidator invoiceValidator, IUserService serviceUser) {
         this.service = service;
-        this.serviceEm = serviceEm;
         this.invoiceValidator = invoiceValidator;
         this.serviceUser= serviceUser;
     }
@@ -74,8 +70,7 @@ public class InvoiceController {
             return validation(result);
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
-        Employees employeeDB= serviceEm.findById(userDb.getId()).orElseThrow();
+        Employees employeeDB= serviceUser.findEmployeeByEmail(authentication.getName()).orElseThrow();
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(invoice, employeeDB));
     }
 
@@ -88,8 +83,7 @@ public class InvoiceController {
         }
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User userDb=serviceUser.findByEmail(authentication.getName()).orElseThrow();
-        Employees employeeDB= serviceEm.findById(userDb.getId()).orElseThrow();
+        Employees employeeDB= serviceUser.findEmployeeByEmail(authentication.getName()).orElseThrow();
         Optional<Invoice> invoiceOptional = service.update(id, invoice, employeeDB);
         if (invoiceOptional.isPresent()) {
             return ResponseEntity.ok(invoiceOptional.orElseThrow());

@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +19,8 @@ import lombok.Setter;
 @Setter
 public class Clients extends User {
 
+    @NotBlank
+    private String address;
 
     
     
