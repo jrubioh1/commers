@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.commers.entities.Rol;
 import com.springboot.commers.repositories.IRolRepository;
+import com.springboot.commers.services.interfaces.IRolService;
 
 @Service
 public class RolServiceImpl implements IRolService {

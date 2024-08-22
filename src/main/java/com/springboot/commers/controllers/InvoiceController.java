@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Invoice;
-import com.springboot.commers.services.IInvoiceService;
-import com.springboot.commers.services.IUserService;
+import com.springboot.commers.services.interfaces.IInvoiceService;
+import com.springboot.commers.services.interfaces.IUserService;
 import com.springboot.commers.validators.InvoiceValidator;
 
 import jakarta.validation.Valid;

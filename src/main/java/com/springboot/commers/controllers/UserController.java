@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.User;
-import com.springboot.commers.services.IUserService;
+import com.springboot.commers.services.interfaces.IUserService;
 
 @RestController
 @RequestMapping("/api/users")

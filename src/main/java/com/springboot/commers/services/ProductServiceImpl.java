@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Product;
 import com.springboot.commers.repositories.IProductRepository;
+import com.springboot.commers.services.interfaces.IProductsService;
 
 @Service
 public class ProductServiceImpl implements IProductsService {

@@ -1,4 +1,4 @@
-package com.springboot.commers.services;
+package com.springboot.commers.services.interfaces;
 
 import com.springboot.commers.entities.Clients;
 import com.springboot.commers.entities.Employees;

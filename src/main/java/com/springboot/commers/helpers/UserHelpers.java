@@ -14,7 +14,7 @@ import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Rol;
 import com.springboot.commers.entities.User;
 import com.springboot.commers.repositories.IUsersRepository;
-import com.springboot.commers.services.IRolService;
+import com.springboot.commers.services.interfaces.IRolService;
 
 @Component
 public class UserHelpers {

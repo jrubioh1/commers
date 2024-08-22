@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Product;
-import com.springboot.commers.services.IProductsService;
-import com.springboot.commers.services.IUserService;
+import com.springboot.commers.services.interfaces.IProductsService;
+import com.springboot.commers.services.interfaces.IUserService;
 import com.springboot.commers.validators.ProductValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

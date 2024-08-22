@@ -3,7 +3,7 @@ package com.springboot.commers.validations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.springboot.commers.services.IProductsService;
+import com.springboot.commers.services.interfaces.IProductsService;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

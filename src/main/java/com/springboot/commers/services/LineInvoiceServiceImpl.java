@@ -11,6 +11,8 @@ import com.springboot.commers.entities.LineInvoice;
 import com.springboot.commers.entities.Product;
 
 import com.springboot.commers.repositories.ILinesRepository;
+import com.springboot.commers.services.interfaces.ILineInvoiceService;
+import com.springboot.commers.services.interfaces.IProductsService;
 
 @Service
 public class LineInvoiceServiceImpl implements ILineInvoiceService {

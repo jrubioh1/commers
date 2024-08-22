@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Employees;
-import com.springboot.commers.services.IEmployeeService;
+import com.springboot.commers.services.interfaces.IEmployeeService;
 import com.springboot.commers.validations.OnCreate;
 import com.springboot.commers.validators.UserValidator;
 

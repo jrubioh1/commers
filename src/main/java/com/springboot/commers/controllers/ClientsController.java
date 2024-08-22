@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Clients;
-import com.springboot.commers.services.IClientService;
+import com.springboot.commers.services.interfaces.IClientService;
 import com.springboot.commers.validations.OnCreate;
 import com.springboot.commers.validators.UserValidator;
 

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.commers.entities.Rol;
-import com.springboot.commers.services.IRolService;
+import com.springboot.commers.services.interfaces.IRolService;
 import com.springboot.commers.validators.RolValidator;
 
 import jakarta.validation.Valid;

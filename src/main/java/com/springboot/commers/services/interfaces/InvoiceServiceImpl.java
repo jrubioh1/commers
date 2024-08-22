@@ -1,4 +1,4 @@
-package com.springboot.commers.services;
+package com.springboot.commers.services.interfaces;
 
 import java.time.LocalDateTime;
 import java.util.List;

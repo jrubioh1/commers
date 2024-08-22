@@ -26,12 +26,12 @@ public class Address {
 
     @OneToMany(mappedBy = "shippingAddress", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
             CascadeType.DETACH })
-    @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private List<Orders> shippingOrders;
 
     @OneToMany(mappedBy = "billingAddress", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
             CascadeType.DETACH })
-    @JsonIgnoreProperties({ "invoice", "hibernateLazyInitializer", "handler" })
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private List<Orders> billingOrders;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
