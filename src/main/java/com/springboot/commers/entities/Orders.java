@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,16 +30,27 @@ public class Orders {
     @JoinColumn(name = "client_id")
     private Clients client; 
 
-    private LocalDateTime orderDate; 
+    private LocalDateTime orderDate;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "status_order_id")
     private StatusOrder statusOrder;
 
-    private Invoice invoice; 
+    
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)  // Establecer la relación uno a uno con la entidad `Profile`
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod; 
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "shipping_address_id")
     private Address  shippingAddress; 
-    
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "billing_address_id")
     private Address billingAddress; 
 
 

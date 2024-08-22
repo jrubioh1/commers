@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -37,8 +38,6 @@ public class Invoice {
     @NotEmpty
     private List<LineInvoice> linesInvoice = new ArrayList<>();
 
-    @NotNull
-    private Double whole=0.0;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "employee_id")
@@ -51,6 +50,13 @@ public class Invoice {
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" , "invoices"})
     @NotNull
     private Clients client;
+
+
+    @OneToOne(mappedBy = "invoice")
+    private Orders order; 
+
+    @NotNull
+    private Double whole=0.0;
 
     private LocalDateTime dateTime= LocalDateTime.now();
 
