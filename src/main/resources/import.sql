@@ -40,11 +40,11 @@ INSERT INTO users (name,lastname,telephone_number , email, password, serial_user
 
 -- Insertar clientes
 
-INSERT INTO clients (id, address) VALUES ((SELECT id FROM users WHERE email = 'john.doe@example.com'), 'address1');
-INSERT INTO clients (id, address) VALUES ((SELECT id FROM users WHERE email = 'jane.smith@example.com'), 'address1');
-INSERT INTO clients (id, address) VALUES ((SELECT id FROM users WHERE email = 'robert.johnson@example.com'), 'address1');
-INSERT INTO clients (id, address) VALUES ((SELECT id FROM users WHERE email = 'emily.davis@example.com'), 'address1');
-INSERT INTO clients (id, address) VALUES ((SELECT id FROM users WHERE email = 'michael.brown@example.com'), 'address1');
+INSERT INTO clients (id) VALUES ((SELECT id FROM users WHERE email = 'john.doe@example.com'));
+INSERT INTO clients (id ) VALUES ((SELECT id FROM users WHERE email = 'jane.smith@example.com'));
+INSERT INTO clients (id) VALUES ((SELECT id FROM users WHERE email = 'robert.johnson@example.com'));
+INSERT INTO clients (id) VALUES ((SELECT id FROM users WHERE email = 'emily.davis@example.com'));
+INSERT INTO clients (id) VALUES ((SELECT id FROM users WHERE email = 'michael.brown@example.com'));
 
 
 
