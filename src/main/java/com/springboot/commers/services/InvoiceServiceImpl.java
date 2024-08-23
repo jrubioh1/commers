@@ -1,4 +1,4 @@
-package com.springboot.commers.services.interfaces;
+package com.springboot.commers.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,9 +12,11 @@ import com.springboot.commers.entities.Employees;
 import com.springboot.commers.entities.Invoice;
 import com.springboot.commers.entities.LineInvoice;
 import com.springboot.commers.repositories.IInvoiceRepository;
-
-//PARA CORREGIR EL ERROR DE DEPENDENCIA CICLICA, TENGO QUE ENCARGAME DE ASIGNAR LA FACTURA A LA LINEA DESDE AQUI
-//MODIFICAR EL UPDATE PORQUE YA NO SE VA CREAR LA LINEAS ANTES, ASIQUE HAY QUE CREARLAS PARA LUEGO UPDATE
+import com.springboot.commers.services.interfaces.IClientService;
+import com.springboot.commers.services.interfaces.IEmployeeService;
+import com.springboot.commers.services.interfaces.IInvoiceService;
+import com.springboot.commers.services.interfaces.ILineInvoiceService;
+import com.springboot.commers.services.interfaces.IProductsService;
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
@@ -54,7 +56,16 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Transactional()
     public Invoice save(Invoice invoice, Employees employee) {
 
-        invoice.setEmployee(serviceEmployee.getEmployeeDb(employee));
+        // en los orders, que son pedido online no hay empleados relacionados, por lo
+        // que habra invoices sin employee
+
+        if (employee == null) {
+            invoice.setEmployee(employee);
+
+        } else {
+            invoice.setEmployee(serviceEmployee.getEmployeeDb(employee));
+        }
+
         invoice.setClient(serviceClient.getClientDb(invoice.getClient()));
         invoice.getLinesInvoice().forEach(line -> {
             line.setInvoice(invoice);
@@ -87,7 +98,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
             invoice.setEmployee(serviceEmployee.getEmployeeDb(employee));
 
             // Actualizar las líneas de factura utilizando el comportamiento en cascada
-            invoiceDb.getLinesInvoice().forEach(line->{
+            invoiceDb.getLinesInvoice().forEach(line -> {
                 serviceLine.delete(line.getId());
             });
 
@@ -99,9 +110,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
                 serviceProduct.fixedStockProduct(line.getProduct().getId(), -line.getQuantity());
                 serviceLine.save(line);
 
-
             });
-            
+
             // Actualizar el timestamp
             invoiceDb.setDateTime(LocalDateTime.now());
 

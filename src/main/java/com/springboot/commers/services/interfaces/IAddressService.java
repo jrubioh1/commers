@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.springboot.commers.entities.Address;
-import com.springboot.commers.entities.Clients;
+
 
 public interface IAddressService {
 
@@ -14,10 +14,10 @@ public interface IAddressService {
 
     Address save(Address address);
 
-    Optional<Address> update(Long id, Clients client);
+    Optional<Address> update(Long id, Address  address);
 
     Optional<Address> delete(Long id);
 
-    Address getClientDb(Address address);
+   
 
 }

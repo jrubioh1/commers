@@ -19,6 +19,6 @@ public interface IStatusOrderService {
 
     Optional<StatusOrder> delete(Long id);
 
-    StatusOrder getClientDb(StatusOrder status);
+
 
 }

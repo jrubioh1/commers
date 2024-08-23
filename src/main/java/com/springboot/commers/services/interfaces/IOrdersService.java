@@ -17,6 +17,5 @@ public interface IOrdersService {
 
     Optional<Orders> delete(Long id);
 
-    Orders getClientDb(Orders order);
 
 }

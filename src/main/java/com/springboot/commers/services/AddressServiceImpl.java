@@ -3,46 +3,69 @@ package com.springboot.commers.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.springboot.commers.entities.Address;
-import com.springboot.commers.entities.Clients;
+
+import com.springboot.commers.repositories.IAddressRepository;
 import com.springboot.commers.services.interfaces.IAddressService;
 
-public class AddressServiceImpl implements IAddressService{
+public class AddressServiceImpl implements IAddressService {
 
-    @Override
+    private final IAddressRepository repository;
+
+    public AddressServiceImpl(IAddressRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override 
+    @Transactional(readOnly = true)
     public List<Address> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return (List<Address>) repository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Address> findById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return repository.findById(id);
     }
 
     @Override
+    @Transactional()
     public Address save(Address address) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        return repository.save(address);
     }
 
     @Override
-    public Optional<Address> update(Long id, Clients client) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    @Transactional()
+    public Optional<Address> update(Long id, Address address) {
+        Optional<Address> addressOptional = repository.findById(id);
+        if (addressOptional.isPresent()) {
+            Address addressDb = addressOptional.get();
+            addressDb.setStreet(address.getStreet());
+            addressDb.setCity(address.getCity());
+            addressDb.setClient(address.getClient());
+            addressDb.setCountry(address.getCountry());
+            addressDb.setPostalCode(address.getPostalCode());
+            addressDb.setState(address.getState());
+            return Optional.of(repository.save(addressDb));
+     
+
+        }
+
+        return addressOptional; 
     }
 
     @Override
+    @Transactional()
     public Optional<Address> delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        Optional<Address> addressOptional= repository.findById(id);
+        addressOptional.ifPresent((addressDB)->{
+            repository.delete(addressDB);
+        });
+
+        return addressOptional; 
     }
 
-    @Override
-    public Address getClientDb(Address address) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getClientDb'");
-    }
 
 }
