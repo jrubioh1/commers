@@ -3,6 +3,7 @@ package com.springboot.commers.entities;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,32 +27,43 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.DETACH })
     @JoinColumn(name = "client_id")
-    private Clients client; 
+    @NotNull
+    private Clients client;
 
+    @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.DETACH })
     @JoinColumn(name = "status_order_id")
+    @NotNull
     private StatusOrder statusOrder;
 
-    
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)  // Establecer la relación uno a uno con la entidad `Profile`
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Establecer la relación uno a uno con la entidad
+                                                                 // `Profile`
     @JoinColumn(name = "invoice_id")
+    @NotNull
     private Invoice invoice;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.DETACH })
     @JoinColumn(name = "payment_method_id")
-    private PaymentMethod paymentMethod; 
+    @NotNull
+    private PaymentMethod paymentMethod;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.DETACH })
     @JoinColumn(name = "shipping_address_id")
-    private Address  shippingAddress; 
+    @NotNull
+    private Address shippingAddress;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.DETACH })
     @JoinColumn(name = "billing_address_id")
+    @NotNull
     private Address billingAddress;
 
     @Override
@@ -83,11 +96,6 @@ public class Orders {
         } else if (!id.equals(other.id))
             return false;
         return true;
-    } 
-
-
-
-
-
+    }
 
 }
