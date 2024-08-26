@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springboot.commers.entities.Clients;
 import com.springboot.commers.entities.Orders;
 import com.springboot.commers.repositories.IOrdersRepository;
 import com.springboot.commers.services.interfaces.IAddressService;
@@ -93,6 +94,11 @@ public class OrdersServiceImpl implements IOrdersService {
             repository.delete(orderDd);
         });
         return ordersOptional;
+    }
+
+    @Override
+    public List<Orders> findByClient(Clients client) {
+        return (List<Orders>) repository.findByClient(client);
     }
 
 

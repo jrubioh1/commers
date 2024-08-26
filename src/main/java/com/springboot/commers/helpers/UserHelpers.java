@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +64,7 @@ public class UserHelpers {
             userDb.getRoles().clear();
             userDb.getInvoices().clear();
 
-            if(isEmployee){
+            if (isEmployee) {
                 ((Employees) userDb).getProductsCreated().clear();
                 ((Employees) userDb).getProductsUpdated().clear();
 
@@ -83,17 +84,14 @@ public class UserHelpers {
                 .collect(Collectors.toList());
     }
 
-
-     public static String generateUserSerial(String name, String email, String hireDate) {
+    public static String generateUserSerial(String name, String email, String hireDate) {
         try {
-      
+
             String input = name + email + hireDate;
 
-        
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
 
-            
             StringBuilder hexString = new StringBuilder();
             for (byte b : hashBytes) {
                 String hex = Integer.toHexString(0xff & b);
@@ -103,11 +101,17 @@ public class UserHelpers {
                 hexString.append(hex);
             }
 
-         
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error al generar el hash: " + e.getMessage(), e);
         }
+    }
+
+    public boolean hasRole(Authentication authentication, String rol) {
+
+        String roleName=String.format("ROLE_%s", rol);
+        return authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
     }
 
 }

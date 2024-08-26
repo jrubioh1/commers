@@ -42,11 +42,6 @@ public class ProductsController {
     // @Autowired
   
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
-    public List<Product> list() {
-        return service.findAll();
-    }
 
     public ProductsController(IProductsService service,
             ProductValidator productValidator, IUserService serviceUser) {
@@ -64,6 +59,13 @@ public class ProductsController {
             return ResponseEntity.ok(productOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
+    public List<Product> list() {
+        return service.findAll();
     }
 
     @PostMapping
